@@ -1,0 +1,22 @@
+{
+    "name": "trekly/auth-service",
+    "description": "Authentication Service for TREKLY",
+    "type": "project",
+    "require": {
+        "php": "^8.2",
+        "firebase/php-jwt": "^6.0",
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Trekly\\Auth\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Trekly Team",
+            "email": "dev@trekly.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}

@@ -1,0 +1,21 @@
+{
+    "name": "trekly/participation-service",
+    "description": "Participation/Booking Service for TREKLY",
+    "type": "project",
+    "require": {
+        "php": "^8.2",
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Trekly\\Participation\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Trekly Team",
+            "email": "dev@trekly.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}

@@ -1,0 +1,23 @@
+.app-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.main-content {
+    padding: 20px;
+    min-height: calc(100vh - 64px);
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.spacer {
+    flex: 1 1 auto;
+}

@@ -1,0 +1,147 @@
+version: '3.8'
+
+services:
+  # API Gateway
+  gateway:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./gateway/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - auth-service
+      - user-service
+      - project-service
+      - participation-service
+    networks:
+      - trekly-network
+
+  # Auth Service
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    volumes:
+      - ./auth-service:/var/www/html
+    environment:
+      - DB_HOST=auth-db
+      - DB_NAME=auth_db
+      - DB_USER=trekly_user
+      - DB_PASS=trekly_pass
+    depends_on:
+      - auth-db
+    networks:
+      - trekly-network
+
+  auth-db:
+    image: mariadb:10.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_pass
+      - MYSQL_DATABASE=auth_db
+      - MYSQL_USER=trekly_user
+      - MYSQL_PASSWORD=trekly_pass
+    volumes:
+      - auth-db-data:/var/lib/mysql
+      - ./auth-service/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - trekly-network
+
+  # User Service
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    volumes:
+      - ./user-service:/var/www/html
+    environment:
+      - DB_HOST=user-db
+      - DB_NAME=user_db
+      - DB_USER=trekly_user
+      - DB_PASS=trekly_pass
+    depends_on:
+      - user-db
+    networks:
+      - trekly-network
+
+  user-db:
+    image: mariadb:10.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_pass
+      - MYSQL_DATABASE=user_db
+      - MYSQL_USER=trekly_user
+      - MYSQL_PASSWORD=trekly_pass
+    volumes:
+      - user-db-data:/var/lib/mysql
+      - ./user-service/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - trekly-network
+
+  # Project Service
+  project-service:
+    build:
+      context: ./project-service
+      dockerfile: Dockerfile
+    volumes:
+      - ./project-service:/var/www/html
+    environment:
+      - DB_HOST=project-db
+      - DB_NAME=project_db
+      - DB_USER=trekly_user
+      - DB_PASS=trekly_pass
+    depends_on:
+      - project-db
+    networks:
+      - trekly-network
+
+  project-db:
+    image: mariadb:10.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_pass
+      - MYSQL_DATABASE=project_db
+      - MYSQL_USER=trekly_user
+      - MYSQL_PASSWORD=trekly_pass
+    volumes:
+      - project-db-data:/var/lib/mysql
+      - ./project-service/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - trekly-network
+
+  # Participation Service
+  participation-service:
+    build:
+      context: ./participation-service
+      dockerfile: Dockerfile
+    volumes:
+      - ./participation-service:/var/www/html
+    environment:
+      - DB_HOST=participation-db
+      - DB_NAME=participation_db
+      - DB_USER=trekly_user
+      - DB_PASS=trekly_pass
+    depends_on:
+      - participation-db
+    networks:
+      - trekly-network
+
+  participation-db:
+    image: mariadb:10.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_pass
+      - MYSQL_DATABASE=participation_db
+      - MYSQL_USER=trekly_user
+      - MYSQL_PASSWORD=trekly_pass
+    volumes:
+      - participation-db-data:/var/lib/mysql
+      - ./participation-service/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - trekly-network
+
+networks:
+  trekly-network:
+    driver: bridge
+
+volumes:
+  auth-db-data:
+  user-db-data:
+  project-db-data:
+  participation-db-data:
