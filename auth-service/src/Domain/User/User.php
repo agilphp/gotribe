@@ -2,50 +2,52 @@
 
 namespace Trekly\Auth\Domain\User;
 
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'users')]
 class User
 {
-    private UserId $id;
-    private Email $email;
-    private Password $password;
+    #[ORM\Id]
+    #[ORM\Column(type: 'string', length: 36)]
+    private string $id;
+
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    private string $email;
+
+    #[ORM\Column(name: 'password_hash', type: 'string', length: 255)]
+    private string $passwordHash;
+
+    #[ORM\Column(type: 'string', length: 50, enumType: Role::class)]
     private Role $role;
+
+    #[ORM\Column(name: 'created_at', type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
-    public function __construct(UserId $id, Email $email, Password $password, Role $role)
+    public function __construct(string $id, string $email, string $passwordHash, Role $role)
     {
         $this->id = $id;
         $this->email = $email;
-        $this->password = $password;
+        $this->passwordHash = $passwordHash;
         $this->role = $role;
         $this->createdAt = new \DateTimeImmutable();
     }
 
-    public static function create(Email $email, Password $password, Role $role): self
+    public static function create(string $email, string $password, Role $role): self
     {
-        return new self(UserId::random(), $email, $password, $role);
+        $id = uniqid('', true);
+        $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+        return new self($id, $email, $passwordHash, $role);
     }
 
-    public function getId(): UserId
+    public function getId(): string { return $this->id; }
+    public function getEmail(): string { return $this->email; }
+    public function getPasswordHash(): string { return $this->passwordHash; }
+    public function getRole(): Role { return $this->role; }
+    public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
+    
+    public function verifyPassword(string $password): bool
     {
-        return $this->id;
-    }
-
-    public function getEmail(): Email
-    {
-        return $this->email;
-    }
-
-    public function getPassword(): Password
-    {
-        return $this->password;
-    }
-
-    public function getRole(): Role
-    {
-        return $this->role;
-    }
-
-    public function getCreatedAt(): \DateTimeImmutable
-    {
-        return $this->createdAt;
+        return password_verify($password, $this->passwordHash);
     }
 }

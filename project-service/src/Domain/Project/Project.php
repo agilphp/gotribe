@@ -2,19 +2,47 @@
 
 namespace Trekly\Project\Domain\Project;
 
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'projects')]
 class Project
 {
+    #[ORM\Id]
+    #[ORM\Column(type: 'string', length: 36)]
     private string $id;
+
+    #[ORM\Column(type: 'string', length: 255)]
     private string $title;
+
+    #[ORM\Column(type: 'text', nullable: true)]
     private string $description;
+
+    #[ORM\Column(name: 'activity_type', type: 'string', length: 50, enumType: ActivityType::class)]
     private ActivityType $activityType;
+
+    #[ORM\Column(name: 'creator_id', type: 'string', length: 36)]
     private string $creatorId;
+
+    #[ORM\Column(name: 'start_date_time', type: 'datetime_immutable')]
     private \DateTimeImmutable $startDateTime;
+
+    #[ORM\Column(name: 'meeting_point', type: 'string', length: 255)]
     private string $meetingPoint;
+
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private float $price;
+
+    #[ORM\Column(type: 'string', length: 3)]
     private string $currency;
+
+    #[ORM\Column(name: 'image_url', type: 'text', nullable: true)]
     private ?string $imageUrl;
+
+    #[ORM\Column(name: 'is_published', type: 'boolean')]
     private bool $isPublished;
+
+    #[ORM\Column(name: 'created_at', type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
     public function __construct(

@@ -1,11 +1,14 @@
 {
     "name": "trekly/auth-service",
-    "description": "Authentication Service for TREKLY",
+    "description": "Auth Service for TREKLY",
     "type": "project",
     "require": {
         "php": "^8.2",
         "firebase/php-jwt": "^6.0",
-        "vlucas/phpdotenv": "^5.5"
+        "vlucas/phpdotenv": "^5.5",
+        "doctrine/orm": "^2.17",
+        "doctrine/dbal": "^3.7",
+        "symfony/cache": "^6.4"
     },
     "autoload": {
         "psr-4": {
@@ -18,5 +21,6 @@
             "email": "dev@trekly.com"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

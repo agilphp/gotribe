@@ -2,12 +2,26 @@
 
 namespace Trekly\Participation\Domain\Participation;
 
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'participations')]
 class Participation
 {
+    #[ORM\Id]
+    #[ORM\Column(type: 'string', length: 36)]
     private string $id;
+
+    #[ORM\Column(name: 'project_id', type: 'string', length: 36)]
     private string $projectId;
+
+    #[ORM\Column(name: 'user_id', type: 'string', length: 36)]
     private string $userId;
+
+    #[ORM\Column(type: 'string', length: 50, enumType: ParticipationStatus::class)]
     private ParticipationStatus $status;
+
+    #[ORM\Column(name: 'created_at', type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
     public function __construct(
@@ -33,17 +47,9 @@ class Participation
         );
     }
 
-    public function confirm(): void
-    {
-        $this->status = ParticipationStatus::CONFIRMED;
-    }
+    public function confirm(): void { $this->status = ParticipationStatus::CONFIRMED; }
+    public function cancel(): void { $this->status = ParticipationStatus::CANCELLED; }
 
-    public function cancel(): void
-    {
-        $this->status = ParticipationStatus::CANCELLED;
-    }
-
-    // Getters
     public function getId(): string { return $this->id; }
     public function getProjectId(): string { return $this->projectId; }
     public function getUserId(): string { return $this->userId; }

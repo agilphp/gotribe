@@ -3,7 +3,6 @@
 namespace Trekly\Auth\Application;
 
 use Trekly\Auth\Domain\Security\TokenProvider;
-use Trekly\Auth\Domain\User\Email;
 use Trekly\Auth\Domain\User\UserRepository;
 
 class LoginUserUseCase
@@ -19,10 +18,9 @@ class LoginUserUseCase
 
     public function execute(string $email, string $password): string
     {
-        $emailVo = new Email($email);
-        $user = $this->userRepository->findByEmail($emailVo);
-
-        if (!$user || !$user->getPassword()->verify($password)) {
+        $user = $this->userRepository->findByEmail($email);
+        
+        if (!$user || !$user->verifyPassword($password)) {
             throw new \Exception("Invalid credentials");
         }
 

@@ -2,8 +2,6 @@
 
 namespace Trekly\Auth\Application;
 
-use Trekly\Auth\Domain\User\Email;
-use Trekly\Auth\Domain\User\Password;
 use Trekly\Auth\Domain\User\Role;
 use Trekly\Auth\Domain\User\User;
 use Trekly\Auth\Domain\User\UserRepository;
@@ -19,16 +17,12 @@ class RegisterUserUseCase
 
     public function execute(string $email, string $password, string $role): void
     {
-        $emailVo = new Email($email);
-        
-        if ($this->userRepository->findByEmail($emailVo)) {
+        if ($this->userRepository->findByEmail($email)) {
             throw new \Exception("User already exists");
         }
 
-        $passwordVo = Password::create($password);
         $roleEnum = Role::from($role);
-
-        $user = User::create($emailVo, $passwordVo, $roleEnum);
+        $user = User::create($email, $password, $roleEnum);
 
         $this->userRepository->save($user);
     }
