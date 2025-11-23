@@ -24,6 +24,10 @@
             <mat-icon>add</mat-icon>
             {{ 'nav.create' | translate }}
         </button>
+        <button *ngIf="user.role === 'CREATOR'" mat-button routerLink="/scanner" class="scanner-nav-btn">
+            <mat-icon>qr_code_scanner</mat-icon>
+            {{ 'nav.scanner' | translate }}
+        </button>
         <button mat-button (click)="logout()">
             <mat-icon>logout</mat-icon>
             {{ 'nav.logout' | translate }}

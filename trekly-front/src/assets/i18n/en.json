@@ -4,7 +4,8 @@
         "login": "Login",
         "logout": "Logout",
         "create": "Create",
-        "language": "Language"
+        "language": "Language",
+        "scanner": "Scanner"
     },
     "search": {
         "city": "City",
@@ -50,7 +51,7 @@
         "login": "Login",
         "loginTitle": "Login to TREKLY",
         "register": "Register",
-        "registerTitle": "Create Account on TREKLY",
+        "registerTitle": "Create TREKLY Account",
         "dontHaveAccount": "Don't have an account?",
         "alreadyHaveAccount": "Already have an account?",
         "createAccount": "Create an account",
@@ -59,7 +60,7 @@
         "creator": "Creator",
         "emailPlaceholder": "e.g. user@example.com",
         "emailRequired": "Email is <strong>required</strong>",
-        "emailInvalid": "Please enter a valid email address",
+        "emailInvalid": "Please enter a valid email",
         "passwordRequired": "Password is <strong>required</strong>",
         "nameRequired": "Name is <strong>required</strong>",
         "loginSuccess": "Login successful",
@@ -85,7 +86,7 @@
         "price": "Price",
         "participants": "Participants",
         "creatorRating": "Creator Rating",
-        "creatorStats": "Creator Stats",
+        "creatorStats": "Creator Statistics",
         "reviews": "reviews",
         "activity": "Activity",
         "date": "Date",
@@ -95,5 +96,17 @@
         "rateCreator": "Rate Creator",
         "yourRating": "Your Rating",
         "submit": "Submit Rating"
+    },
+    "scanner": {
+        "title": "QR Scanner",
+        "subtitle": "Scan the ticket QR code to validate attendance",
+        "startScan": "Start Scanning",
+        "stopScan": "Stop Scanning",
+        "validating": "Validating ticket...",
+        "tryAgain": "Try Again",
+        "validTicket": "Valid Ticket!",
+        "invalidTicket": "Invalid Ticket",
+        "timestamp": "Validation time",
+        "scanNext": "Scan Next"
     }
 }

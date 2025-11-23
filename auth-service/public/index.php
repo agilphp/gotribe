@@ -24,8 +24,9 @@ try {
     
     $userRepository = new DoctrineUserRepository($entityManager);
     $tokenProvider = new JwtTokenProvider($_ENV['JWT_SECRET'] ?? 'secret_key_change_me');
+    $emailService = new Trekly\Auth\Infrastructure\Email\EmailService();
     
-    $registerUseCase = new RegisterUserUseCase($userRepository);
+    $registerUseCase = new RegisterUserUseCase($userRepository, $emailService);
     $loginUseCase = new LoginUserUseCase($userRepository, $tokenProvider);
     
     $registerController = new RegisterController($registerUseCase);

@@ -27,12 +27,14 @@ class EmailService
     public function sendParticipationConfirmation(
         string $participantEmail,
         string $participantName,
-        array $project
+        array $project,
+        ?string $pdfContent = null,
+        ?string $pdfFilename = null
     ): bool {
         $subject = "You've joined: {$project['title']}";
         $body = $this->getParticipantEmailTemplate($participantName, $project);
         
-        return $this->send($participantEmail, $participantName, $subject, $body);
+        return $this->send($participantEmail, $participantName, $subject, $body, $pdfContent, $pdfFilename);
     }
 
     public function sendNewParticipantNotification(
@@ -47,7 +49,14 @@ class EmailService
         return $this->send($creatorEmail, $creatorName, $subject, $body);
     }
 
-    private function send(string $toEmail, string $toName, string $subject, string $body): bool
+    private function send(
+        string $toEmail, 
+        string $toName, 
+        string $subject, 
+        string $body,
+        ?string $attachmentContent = null,
+        ?string $attachmentName = null
+    ): bool
     {
         error_log("EmailService - Attempting to send email to: {$toEmail}");
         error_log("EmailService - Subject: {$subject}");
@@ -68,6 +77,11 @@ class EmailService
             // Recipients
             $mail->setFrom($this->fromEmail, $this->fromName);
             $mail->addAddress($toEmail, $toName);
+
+            // Attachments
+            if ($attachmentContent && $attachmentName) {
+                $mail->addStringAttachment($attachmentContent, $attachmentName);
+            }
 
             // Content
             $mail->isHTML(true);

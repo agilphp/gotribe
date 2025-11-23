@@ -1,0 +1,65 @@
+<div class="scanner-container">
+    <mat-card class="scanner-card">
+        <mat-card-header>
+            <mat-card-title>{{ 'scanner.title' | translate }}</mat-card-title>
+            <mat-card-subtitle>{{ 'scanner.subtitle' | translate }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <!-- QR Reader Container -->
+            <div id="qr-reader" [class.hidden]="!isScanning"></div>
+
+            <!-- Controls -->
+            <div class="controls" *ngIf="!validationResult && !isValidating">
+                <button mat-raised-button color="primary" (click)="startScanning()" *ngIf="!isScanning"
+                    class="scan-button">
+                    <mat-icon>qr_code_scanner</mat-icon>
+                    {{ 'scanner.startScan' | translate }}
+                </button>
+
+                <button mat-raised-button color="warn" (click)="stopScanning()" *ngIf="isScanning" class="scan-button">
+                    <mat-icon>stop</mat-icon>
+                    {{ 'scanner.stopScan' | translate }}
+                </button>
+            </div>
+
+            <!-- Validating Spinner -->
+            <div class="validation-loading" *ngIf="isValidating">
+                <mat-spinner diameter="50"></mat-spinner>
+                <p>{{ 'scanner.validating' | translate }}</p>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-message" *ngIf="error">
+                <mat-icon color="warn">error</mat-icon>
+                <p>{{ error }}</p>
+                <button mat-raised-button (click)="reset(); startScanning()">
+                    {{ 'scanner.tryAgain' | translate }}
+                </button>
+            </div>
+
+            <!-- Success Result -->
+            <div class="success-result" *ngIf="validationResult && validationResult.valid">
+                <mat-icon color="primary" class="success-icon">check_circle</mat-icon>
+                <h2>{{ 'scanner.validTicket' | translate }}</h2>
+                <p class="message">{{ validationResult.message }}</p>
+                <div class="details">
+                    <p><strong>{{ 'scanner.timestamp' | translate }}:</strong> {{ validationResult.timestamp }}</p>
+                </div>
+                <button mat-raised-button color="primary" (click)="reset(); startScanning()">
+                    {{ 'scanner.scanNext' | translate }}
+                </button>
+            </div>
+
+            <!-- Invalid Result -->
+            <div class="error-result" *ngIf="validationResult && !validationResult.valid">
+                <mat-icon color="warn" class="error-icon">cancel</mat-icon>
+                <h2>{{ 'scanner.invalidTicket' | translate }}</h2>
+                <p class="message">{{ validationResult.error }}</p>
+                <button mat-raised-button color="warn" (click)="reset(); startScanning()">
+                    {{ 'scanner.scanNext' | translate }}
+                </button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

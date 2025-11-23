@@ -1,32 +1,44 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthService } from '../../auth/auth.service';
+import { environment } from '../../../environments/environment';
+
+export interface ValidationResult {
+    valid: boolean;
+    message: string;
+    participantId?: string;
+    projectId?: string;
+    timestamp?: string;
+    error?: string;
+}
+
+export interface Participation {
+    id: string;
+    projectId: string;
+    userId: string;
+    status: string;
+    requestedAt: string;
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class ParticipationService {
-    private apiUrl = '/api/participations';
+    private apiUrl = `${environment.apiUrl}/participations`;
 
-    constructor(private http: HttpClient, private authService: AuthService) { }
+    constructor(private http: HttpClient) { }
 
-    private getHeaders(): HttpHeaders {
-        const user = this.authService.currentUserValue;
-        let headers = new HttpHeaders();
-        if (user && user.token) {
-            headers = headers.set('Authorization', `Bearer ${user.token}`);
-        }
-        return headers;
+    validateTicket(participationId: string): Observable<ValidationResult> {
+        return this.http.post<ValidationResult>(`${this.apiUrl}/validate`, {
+            participationId
+        });
+    }
+
+    getUserParticipations(userId: string): Observable<Participation[]> {
+        return this.http.get<Participation[]>(`${this.apiUrl}/user/${userId}`);
     }
 
     joinProject(projectId: string): Observable<any> {
-        return this.http.post(`${this.apiUrl}`, {
-            projectId
-        }, { headers: this.getHeaders() });
-    }
-
-    getUserParticipations(userId: string): Observable<any[]> {
-        return this.http.get<any[]>(`${this.apiUrl}/user/${userId}`, { headers: this.getHeaders() });
+        return this.http.post(`${this.apiUrl}`, { projectId });
     }
 }

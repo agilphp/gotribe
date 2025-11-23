@@ -9,7 +9,8 @@ use Trekly\Project\Application\ListProjectsUseCase;
 use Trekly\Project\Interface\Http\ProjectController;
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+$allowedOrigin = $_ENV['CORS_ALLOWED_ORIGIN'] ?? '*';
+header("Access-Control-Allow-Origin: $allowedOrigin");
 header('Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 

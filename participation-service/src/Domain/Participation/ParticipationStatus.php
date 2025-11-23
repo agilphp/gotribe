@@ -8,4 +8,5 @@ enum ParticipationStatus: string
     case CONFIRMED = 'CONFIRMED';
     case WAITLIST = 'WAITLIST';
     case CANCELLED = 'CANCELLED';
+    case ATTENDED = 'ATTENDED';
 }

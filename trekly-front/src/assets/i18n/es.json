@@ -4,7 +4,8 @@
         "login": "Iniciar Sesión",
         "logout": "Salir",
         "create": "Crear",
-        "language": "Idioma"
+        "language": "Idioma",
+        "scanner": "Escáner"
     },
     "search": {
         "city": "Ciudad",
@@ -95,5 +96,17 @@
         "rateCreator": "Calificar Creador",
         "yourRating": "Tu Calificación",
         "submit": "Enviar Calificación"
+    },
+    "scanner": {
+        "title": "Escáner QR",
+        "subtitle": "Escanea el código QR del ticket para validar la asistencia",
+        "startScan": "Iniciar Escaneo",
+        "stopScan": "Detener Escaneo",
+        "validating": "Validando ticket...",
+        "tryAgain": "Intentar de nuevo",
+        "validTicket": "¡Ticket Válido!",
+        "invalidTicket": "Ticket Inválido",
+        "timestamp": "Hora de validación",
+        "scanNext": "Escanear Siguiente"
     }
 }

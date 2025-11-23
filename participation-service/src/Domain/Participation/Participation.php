@@ -49,6 +49,7 @@ class Participation
 
     public function confirm(): void { $this->status = ParticipationStatus::CONFIRMED; }
     public function cancel(): void { $this->status = ParticipationStatus::CANCELLED; }
+    public function markAsAttended(): void { $this->status = ParticipationStatus::ATTENDED; }
 
     public function getId(): string { return $this->id; }
     public function getProjectId(): string { return $this->projectId; }

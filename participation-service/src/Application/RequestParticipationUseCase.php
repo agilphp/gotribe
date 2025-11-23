@@ -7,6 +7,7 @@ use Trekly\Participation\Domain\Participation\ParticipationRepository;
 use Trekly\Participation\Infrastructure\Http\ProjectServiceClient;
 use Trekly\Participation\Infrastructure\Http\AuthServiceClient;
 use Trekly\Participation\Infrastructure\Email\EmailService;
+use Trekly\Participation\Infrastructure\Services\TicketService;
 
 class RequestParticipationUseCase
 {
@@ -14,7 +15,8 @@ class RequestParticipationUseCase
         private ParticipationRepository $repository,
         private ProjectServiceClient $projectClient,
         private AuthServiceClient $userClient,
-        private EmailService $emailService
+        private EmailService $emailService,
+        private TicketService $ticketService
     ) {}
 
     public function execute(string $projectId, string $userId): Participation
@@ -48,13 +50,31 @@ class RequestParticipationUseCase
         // Send email notifications (non-blocking - errors are logged but don't fail the request)
         try {
             // Get participant details from auth-service (has email)
+            error_log("RequestParticipationUseCase - Fetching participant: {$userId}");
             $participant = $this->userClient->getUser($userId);
+            error_log("RequestParticipationUseCase - Participant data: " . json_encode($participant));
+            
             if ($participant && isset($participant['email'])) {
+                // Generate PDF Ticket
+                $pdfContent = $this->ticketService->generateTicketPdf(
+                    [
+                        'id' => $participation->getId(),
+                        'userId' => $participation->getUserId(),
+                        'projectId' => $participation->getProjectId()
+                    ],
+                    $project,
+                    $participant
+                );
+
                 $this->emailService->sendParticipationConfirmation(
                     $participant['email'],
-                    'Adventurer', // We don't have name in auth-service, could fetch from user-service if needed
-                    $project
+                    'Adventurer',
+                    $project,
+                    $pdfContent,
+                    'Trekly_Ticket.pdf'
                 );
+            } else {
+                error_log("RequestParticipationUseCase - Participant email not found or user null");
             }
 
             // Get creator details from auth-service

@@ -6,6 +6,10 @@ use Trekly\Participation\Infrastructure\Persistence\DoctrineParticipationReposit
 use Trekly\Participation\Application\RequestParticipationUseCase;
 use Trekly\Participation\Application\UpdateParticipationStatusUseCase;
 use Trekly\Participation\Interface\Http\ParticipationController;
+use Trekly\Participation\Infrastructure\Http\ProjectServiceClient;
+use Trekly\Participation\Infrastructure\Http\AuthServiceClient;
+use Trekly\Participation\Infrastructure\Email\EmailService;
+use Trekly\Participation\Infrastructure\Services\TicketService;
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -21,14 +25,16 @@ try {
     $entityManager = require __DIR__ . '/../bootstrap.php';
     
     $repository = new DoctrineParticipationRepository($entityManager);
-    $projectClient = new \Trekly\Participation\Infrastructure\Http\ProjectServiceClient();
-    $authClient = new \Trekly\Participation\Infrastructure\Http\AuthServiceClient();
-    $emailService = new \Trekly\Participation\Infrastructure\Email\EmailService();
+    $projectClient = new ProjectServiceClient();
+    $authClient = new AuthServiceClient();
+    $emailService = new EmailService();
+    $ticketService = new TicketService();
     
-    $requestUseCase = new RequestParticipationUseCase($repository, $projectClient, $authClient, $emailService);
+    $requestUseCase = new RequestParticipationUseCase($repository, $projectClient, $authClient, $emailService, $ticketService);
     $updateStatusUseCase = new UpdateParticipationStatusUseCase($repository);
+    $validateUseCase = new \Trekly\Participation\Application\ValidateParticipationUseCase($repository);
     
-    $controller = new ParticipationController($requestUseCase, $updateStatusUseCase, $repository);
+    $controller = new ParticipationController($requestUseCase, $updateStatusUseCase, $validateUseCase, $repository);
     
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     $method = $_SERVER['REQUEST_METHOD'];
@@ -56,6 +62,8 @@ try {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed']);
         }
+    } elseif ($uri === '/api/participations/validate' && $method === 'POST') {
+        $controller->validate();
     } else {
         http_response_code(404);
         echo json_encode(['error' => 'Not Found', 'uri' => $uri]);
