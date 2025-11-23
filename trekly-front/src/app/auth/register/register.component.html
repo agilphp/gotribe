@@ -28,10 +28,31 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Role</mat-label>
-                    <input matInput formControlName="role" placeholder="MEMBER or CREATOR">
-                    <!-- Ideally a select, but keeping simple for now as per MVP -->
+                    <mat-label>Rol</mat-label>
+                    <mat-select formControlName="role">
+                        <mat-option *ngFor="let role of roles" [value]="role">
+                            {{ role }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="registerForm.get('role')?.hasError('required')">
+                        Role is <strong>required</strong>
+                    </mat-error>
                 </mat-form-field>
+
+                <div class="terms-checkbox" style="margin: 20px 0;">
+                    <mat-checkbox formControlName="acceptTerms">
+                        Acepto la
+                        <a href="javascript:void(0)" (click)="openTermsDialog()"
+                            style="color: #3f51b5; text-decoration: underline;">
+                            Declaración de Responsabilidad y Políticas de Uso – Plataforma RUNPAL
+                        </a>
+                    </mat-checkbox>
+                    <mat-error
+                        *ngIf="registerForm.get('acceptTerms')?.hasError('required') && registerForm.get('acceptTerms')?.touched"
+                        style="color: #f44336; font-size: 12px; margin-top: 5px; display: block;">
+                        Debe aceptar los términos y condiciones para continuar
+                    </mat-error>
+                </div>
 
                 <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid"
                     class="full-width">

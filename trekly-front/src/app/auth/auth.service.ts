@@ -24,9 +24,13 @@ export class AuthService {
   login(email: string, password: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, { email, password })
       .pipe(tap(response => {
-        // Store token and basic user info (if available, or decode token)
-        // For MVP, we just store the token. Ideally decode it.
-        const user = { token: response.token, email };
+        // Response now includes token, role, and userId
+        const user = {
+          token: response.token,
+          email,
+          role: response.role,
+          userId: response.userId
+        };
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
       }));

@@ -38,6 +38,21 @@ try {
         $registerController->handle();
     } elseif ($method === 'POST' && $uri === '/api/auth/login') {
         $loginController->handle();
+    } elseif ($method === 'GET' && preg_match('#^/api/auth/users/([^/]+)$#', $uri, $matches)) {
+        // Simple endpoint to get user by ID (for email notifications)
+        $userId = $matches[1];
+        $user = $userRepository->findById($userId);
+        
+        if ($user) {
+            echo json_encode([
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'role' => $user->getRole()->value
+            ]);
+        } else {
+            http_response_code(404);
+            echo json_encode(['error' => 'User not found']);
+        }
     } else {
         http_response_code(404);
         echo json_encode(['error' => 'Not Found', 'uri' => $uri]);

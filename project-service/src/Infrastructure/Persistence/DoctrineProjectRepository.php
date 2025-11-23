@@ -20,7 +20,12 @@ class DoctrineProjectRepository implements ProjectRepository
 
     public function findById(string $id): ?Project
     {
-        return $this->entityManager->find(Project::class, $id);
+        $project = $this->entityManager->find(Project::class, $id);
+        if ($project) {
+            $project->checkAndUpdateStatus();
+            $this->entityManager->flush();
+        }
+        return $project;
     }
 
     public function findAll(array $filters = []): array
@@ -40,6 +45,19 @@ class DoctrineProjectRepository implements ProjectRepository
                ->setParameter('isPublished', (bool) $filters['isPublished']);
         }
 
-        return $qb->getQuery()->getResult();
+        // Always filter by active status (only show active projects)
+        $qb->andWhere('p.isActive = :isActive')
+           ->setParameter('isActive', true);
+
+        $projects = $qb->getQuery()->getResult();
+
+        // Update status for each project before returning
+        foreach ($projects as $project) {
+            $project->checkAndUpdateStatus();
+        }
+        $this->entityManager->flush();
+
+        // Filter again to exclude projects that just became inactive
+        return array_filter($projects, fn($p) => $p->isActive());
     }
 }

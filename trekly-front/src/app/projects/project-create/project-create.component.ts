@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ProjectService } from '../project.service';
+import { AuthService } from '../../auth/auth.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -38,7 +39,8 @@ export class ProjectCreateComponent {
         private fb: FormBuilder,
         private projectService: ProjectService,
         private router: Router,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private authService: AuthService
     ) {
         this.projectForm = this.fb.group({
             title: ['', Validators.required],
@@ -50,6 +52,14 @@ export class ProjectCreateComponent {
             price: [0, [Validators.required, Validators.min(0)]],
             currency: ['USD', Validators.required]
         });
+    }
+
+    ngOnInit(): void {
+        const user = this.authService.currentUserValue;
+        if (user && user.role === 'MEMBER') {
+            this.snackBar.open('You must be a Creator to create adventures.', 'Close', { duration: 3000 });
+            this.router.navigate(['/projects']);
+        }
     }
 
     onFileSelected(event: any) {

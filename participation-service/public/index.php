@@ -21,11 +21,14 @@ try {
     $entityManager = require __DIR__ . '/../bootstrap.php';
     
     $repository = new DoctrineParticipationRepository($entityManager);
+    $projectClient = new \Trekly\Participation\Infrastructure\Http\ProjectServiceClient();
+    $authClient = new \Trekly\Participation\Infrastructure\Http\AuthServiceClient();
+    $emailService = new \Trekly\Participation\Infrastructure\Email\EmailService();
     
-    $requestUseCase = new RequestParticipationUseCase($repository);
+    $requestUseCase = new RequestParticipationUseCase($repository, $projectClient, $authClient, $emailService);
     $updateStatusUseCase = new UpdateParticipationStatusUseCase($repository);
     
-    $controller = new ParticipationController($requestUseCase, $updateStatusUseCase);
+    $controller = new ParticipationController($requestUseCase, $updateStatusUseCase, $repository);
     
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     $method = $_SERVER['REQUEST_METHOD'];
@@ -33,6 +36,14 @@ try {
     if ($uri === '/api/participations') {
         if ($method === 'POST') {
             $controller->request();
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method Not Allowed']);
+        }
+    } elseif (preg_match('#^/api/participations/user/([^/]+)$#', $uri, $matches)) {
+        $userId = $matches[1];
+        if ($method === 'GET') {
+            $controller->getUserParticipations($userId);
         } else {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed']);

@@ -87,7 +87,9 @@ services:
       - DB_HOST=project-db
       - DB_NAME=project_db
       - DB_USER=trekly_user
+      - DB_USER=trekly_user
       - DB_PASS=trekly_pass
+      - JWT_SECRET=secret_key_change_me
     depends_on:
       - project-db
     networks:

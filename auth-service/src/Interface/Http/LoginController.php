@@ -24,8 +24,8 @@ class LoginController
         }
 
         try {
-            $token = $this->useCase->execute($data['email'], $data['password']);
-            echo json_encode(['token' => $token]);
+            $result = $this->useCase->execute($data['email'], $data['password']);
+            echo json_encode($result);
         } catch (\Exception $e) {
             http_response_code(401);
             echo json_encode(['error' => $e->getMessage()]);

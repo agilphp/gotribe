@@ -35,6 +35,7 @@ class CreateProjectUseCase
             $meetingPoint,
             $price,
             $currency,
+            10, // maxGuests - default value
             $imageUrl
         );
         

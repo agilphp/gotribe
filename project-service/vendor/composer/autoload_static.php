@@ -49,6 +49,10 @@ class ComposerStaticInitb550c16aa8c3fbc1a43b083ea7e9332f
         array (
             'GrahamCampbell\\ResultType\\' => 26,
         ),
+        'F' =>
+        array (
+            'Firebase\\JWT\\' => 13,
+        ),
         'D' =>
         array (
             'Dotenv\\' => 7,
@@ -142,6 +146,10 @@ class ComposerStaticInitb550c16aa8c3fbc1a43b083ea7e9332f
         'GrahamCampbell\\ResultType\\' =>
         array (
             0 => __DIR__ . '/..' . '/graham-campbell/result-type/src',
+        ),
+        'Firebase\\JWT\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
         'Dotenv\\' =>
         array (

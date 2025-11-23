@@ -23,6 +23,15 @@ class DoctrineParticipationRepository implements ParticipationRepository
         return $this->entityManager->find(Participation::class, $id);
     }
 
+    public function findByProjectAndUser(string $projectId, string $userId): ?Participation
+    {
+        return $this->entityManager->getRepository(Participation::class)
+            ->findOneBy([
+                'projectId' => $projectId,
+                'userId' => $userId
+            ]);
+    }
+
     public function findByProjectId(string $projectId): array
     {
         return $this->entityManager->getRepository(Participation::class)

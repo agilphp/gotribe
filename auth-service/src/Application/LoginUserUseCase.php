@@ -16,7 +16,7 @@ class LoginUserUseCase
         $this->tokenProvider = $tokenProvider;
     }
 
-    public function execute(string $email, string $password): string
+    public function execute(string $email, string $password): array
     {
         $user = $this->userRepository->findByEmail($email);
         
@@ -24,6 +24,12 @@ class LoginUserUseCase
             throw new \Exception("Invalid credentials");
         }
 
-        return $this->tokenProvider->generateToken($user);
+        $token = $this->tokenProvider->generateToken($user);
+
+        return [
+            'token' => $token,
+            'role' => $user->getRole()->value,
+            'userId' => $user->getId()
+        ];
     }
 }

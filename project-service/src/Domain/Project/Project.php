@@ -36,11 +36,17 @@ class Project
     #[ORM\Column(type: 'string', length: 3)]
     private string $currency;
 
+    #[ORM\Column(name: 'max_guests', type: 'integer')]
+    private int $maxGuests;
+
     #[ORM\Column(name: 'image_url', type: 'text', nullable: true)]
     private ?string $imageUrl;
 
     #[ORM\Column(name: 'is_published', type: 'boolean')]
     private bool $isPublished;
+
+    #[ORM\Column(name: 'is_active', type: 'boolean')]
+    private bool $isActive;
 
     #[ORM\Column(name: 'created_at', type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
@@ -55,6 +61,7 @@ class Project
         string $meetingPoint,
         float $price,
         string $currency,
+        int $maxGuests = 10,
         ?string $imageUrl = null
     ) {
         $this->id = $id;
@@ -66,8 +73,10 @@ class Project
         $this->meetingPoint = $meetingPoint;
         $this->price = $price;
         $this->currency = $currency;
+        $this->maxGuests = $maxGuests;
         $this->imageUrl = $imageUrl;
         $this->isPublished = false;
+        $this->isActive = true;
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -80,6 +89,7 @@ class Project
         string $meetingPoint,
         float $price,
         string $currency,
+        int $maxGuests = 10,
         ?string $imageUrl = null
     ): self {
         return new self(
@@ -92,6 +102,7 @@ class Project
             $meetingPoint,
             $price,
             $currency,
+            $maxGuests,
             $imageUrl
         );
     }
@@ -111,7 +122,22 @@ class Project
     public function getMeetingPoint(): string { return $this->meetingPoint; }
     public function getPrice(): float { return $this->price; }
     public function getCurrency(): string { return $this->currency; }
+    public function getMaxGuests(): int { return $this->maxGuests; }
     public function getImageUrl(): ?string { return $this->imageUrl; }
     public function isPublished(): bool { return $this->isPublished; }
+    public function isActive(): bool { return $this->isActive; }
     public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
+
+    public function deactivate(): void
+    {
+        $this->isActive = false;
+    }
+
+    public function checkAndUpdateStatus(): void
+    {
+        $now = new \DateTimeImmutable();
+        if ($this->startDateTime < $now && $this->isActive) {
+            $this->deactivate();
+        }
+    }
 }

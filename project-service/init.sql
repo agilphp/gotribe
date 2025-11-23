@@ -8,7 +8,9 @@ CREATE TABLE IF NOT EXISTS projects (
     meeting_point VARCHAR(255) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     currency VARCHAR(3) NOT NULL,
+    max_guests INT DEFAULT 10 NOT NULL,
     image_url LONGTEXT,
     is_published BOOLEAN DEFAULT FALSE,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at DATETIME NOT NULL
 );

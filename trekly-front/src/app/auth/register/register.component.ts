@@ -6,7 +6,11 @@ import { AuthService } from '../auth.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { TermsDialogComponent } from '../terms-dialog/terms-dialog.component';
 
 @Component({
     selector: 'app-register',
@@ -17,25 +21,39 @@ import { MatButtonModule } from '@angular/material/button';
         RouterModule,
         MatCardModule,
         MatInputModule,
+        MatSelectModule,
         MatButtonModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatCheckboxModule,
+        MatDialogModule
     ],
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
     registerForm: FormGroup;
+    roles = ['MEMBER', 'CREATOR'];
 
     constructor(
         private fb: FormBuilder,
         private authService: AuthService,
         private router: Router,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private dialog: MatDialog
     ) {
         this.registerForm = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required, Validators.minLength(8)]],
-            role: ['MEMBER', Validators.required]
+            role: ['MEMBER', Validators.required],
+            acceptTerms: [false, Validators.requiredTrue]
+        });
+    }
+
+    openTermsDialog() {
+        this.dialog.open(TermsDialogComponent, {
+            width: '80%',
+            maxWidth: '800px',
+            maxHeight: '90vh'
         });
     }
 

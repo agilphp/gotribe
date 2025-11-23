@@ -4,19 +4,15 @@ namespace Trekly\Participation\Interface\Http;
 
 use Trekly\Participation\Application\RequestParticipationUseCase;
 use Trekly\Participation\Application\UpdateParticipationStatusUseCase;
+use Trekly\Participation\Infrastructure\Persistence\DoctrineParticipationRepository;
 
 class ParticipationController
 {
-    private RequestParticipationUseCase $requestUseCase;
-    private UpdateParticipationStatusUseCase $updateStatusUseCase;
-
     public function __construct(
-        RequestParticipationUseCase $requestUseCase,
-        UpdateParticipationStatusUseCase $updateStatusUseCase
-    ) {
-        $this->requestUseCase = $requestUseCase;
-        $this->updateStatusUseCase = $updateStatusUseCase;
-    }
+        private RequestParticipationUseCase $requestUseCase,
+        private UpdateParticipationStatusUseCase $updateStatusUseCase,
+        private DoctrineParticipationRepository $repository
+    ) {}
 
     public function request(): void
     {
@@ -55,6 +51,28 @@ class ParticipationController
             echo json_encode(['message' => 'Status updated']);
         } catch (\Exception $e) {
             http_response_code(400);
+            echo json_encode(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function getUserParticipations(string $userId): void
+    {
+        try {
+            $participations = $this->repository->findByUserId($userId);
+            
+            $response = array_map(function ($p) {
+                return [
+                    'id' => $p->getId(),
+                    'projectId' => $p->getProjectId(),
+                    'userId' => $p->getUserId(),
+                    'status' => $p->getStatus()->value,
+                    'requestedAt' => $p->getRequestedAt()->format('Y-m-d H:i:s')
+                ];
+            }, $participations);
+
+            echo json_encode($response);
+        } catch (\Exception $e) {
+            http_response_code(500);
             echo json_encode(['error' => $e->getMessage()]);
         }
     }

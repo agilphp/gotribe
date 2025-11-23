@@ -35,7 +35,8 @@ try {
     $controller = new ProjectController(
         $createProjectUseCase,
         $publishProjectUseCase,
-        $listProjectsUseCase
+        $listProjectsUseCase,
+        $projectRepository
     );
 
     // Router
@@ -56,6 +57,14 @@ try {
         $id = $matches[1];
         if ($method === 'POST') {
             $controller->publish($id);
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method Not Allowed']);
+        }
+    } elseif (preg_match('#^/api/projects/([^/]+)$#', $uri, $matches)) {
+        $id = $matches[1];
+        if ($method === 'GET') {
+            $controller->getById($id);
         } else {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed']);

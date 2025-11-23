@@ -6,7 +6,15 @@ use Trekly\User\Infrastructure\Persistence\DoctrineUserProfileRepository;
 use Trekly\User\Application\GetUserProfileUseCase;
 use Trekly\User\Application\UpdateUserProfileUseCase;
 use Trekly\User\Application\CreateCreatorProfileUseCase;
+use Trekly\User\Application\RateCreatorUseCase;
 use Trekly\User\Interface\Http\ProfileController;
+use Trekly\User\Interface\Http\RatingController;
+
+use Trekly\User\Infrastructure\Persistence\DoctrineCreatorRatingRepository;
+use Trekly\User\Application\GetCreatorAverageRatingUseCase;
+
+use Trekly\User\Application\GetCreatorRatingsUseCase;
+use Trekly\User\Application\GetMemberRatingsUseCase;
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -32,6 +40,19 @@ try {
         $updateUserProfileUseCase,
         $createCreatorProfileUseCase
     );
+
+    $ratingRepository = new DoctrineCreatorRatingRepository($entityManager);
+    $rateCreatorUseCase = new RateCreatorUseCase($ratingRepository, $repository);
+    $getCreatorAverageRatingUseCase = new GetCreatorAverageRatingUseCase($ratingRepository);
+    $getCreatorRatingsUseCase = new GetCreatorRatingsUseCase($ratingRepository);
+    $getMemberRatingsUseCase = new GetMemberRatingsUseCase($ratingRepository);
+
+    $ratingController = new RatingController(
+        $rateCreatorUseCase,
+        $getCreatorAverageRatingUseCase,
+        $getCreatorRatingsUseCase,
+        $getMemberRatingsUseCase
+    );
     
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     $method = $_SERVER['REQUEST_METHOD'];
@@ -50,6 +71,37 @@ try {
         $userId = $matches[1];
         if ($method === 'POST') {
             $controller->createCreatorProfile($userId);
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method Not Allowed']);
+        }
+    } elseif ($uri === '/api/ratings') {
+        if ($method === 'POST') {
+            $ratingController->rate();
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method Not Allowed']);
+        }
+    } elseif (preg_match('#^/api/ratings/creator/([^/]+)/average$#', $uri, $matches)) {
+        $creatorId = $matches[1];
+        if ($method === 'GET') {
+            $ratingController->getAverage($creatorId);
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method Not Allowed']);
+        }
+    } elseif (preg_match('#^/api/ratings/creator/([^/]+)$#', $uri, $matches)) {
+        $creatorId = $matches[1];
+        if ($method === 'GET') {
+            $ratingController->getCreatorRatings($creatorId);
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method Not Allowed']);
+        }
+    } elseif (preg_match('#^/api/ratings/member/([^/]+)$#', $uri, $matches)) {
+        $memberId = $matches[1];
+        if ($method === 'GET') {
+            $ratingController->getMemberRatings($memberId);
         } else {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed']);

@@ -7,6 +7,11 @@ export const authGuard: CanActivateFn = (route, state) => {
     const router = inject(Router);
 
     if (authService.currentUserValue) {
+        // Check for role restriction on create route
+        if (state.url.includes('/projects/create') && authService.currentUserValue.role === 'MEMBER') {
+            // Redirect to projects list or show error
+            return router.createUrlTree(['/projects']);
+        }
         return true;
     }
 

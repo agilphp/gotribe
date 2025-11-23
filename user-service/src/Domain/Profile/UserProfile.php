@@ -33,6 +33,12 @@ class UserProfile
     #[ORM\Column(name: 'experience_years', type: 'integer', nullable: true)]
     private ?int $experienceYears;
 
+    #[ORM\Column(name: 'average_rating', type: 'decimal', precision: 3, scale: 2, options: ['default' => 0])]
+    private float $averageRating;
+
+    #[ORM\Column(name: 'total_ratings', type: 'integer', options: ['default' => 0])]
+    private int $totalRatings;
+
     public function __construct(
         string $userId,
         string $fullName,
@@ -48,6 +54,8 @@ class UserProfile
         $this->isCreator = false;
         $this->specialty = null;
         $this->experienceYears = null;
+        $this->averageRating = 0.0;
+        $this->totalRatings = 0;
     }
 
     public function getUserId(): string { return $this->userId; }
@@ -58,6 +66,14 @@ class UserProfile
     public function isCreator(): bool { return $this->isCreator; }
     public function getSpecialty(): ?string { return $this->specialty; }
     public function getExperienceYears(): ?int { return $this->experienceYears; }
+    public function getAverageRating(): float { return $this->averageRating; }
+    public function getTotalRatings(): int { return $this->totalRatings; }
+
+    public function updateRatingStats(float $newAverage, int $newTotal): void
+    {
+        $this->averageRating = $newAverage;
+        $this->totalRatings = $newTotal;
+    }
 
     public function becomeCreator(string $specialty, int $experienceYears): void
     {
