@@ -22,7 +22,7 @@ body {
 body {
     margin: 0;
     font-family: 'Roboto', sans-serif;
-    background-color: #fafafa;
+    background-color: #fff;
 }
 
 /* Custom Utilities */
@@ -63,9 +63,10 @@ h6 {
 
 .logo {
     cursor: pointer;
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: 1px;
+    color: #FF385C;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.5px;
 }
 
 .spacer {
@@ -73,13 +74,50 @@ h6 {
 }
 
 .app-toolbar {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: white !important;
+    color: #222 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+    height: 64px;
+    padding: 0 24px;
+
+    button {
+        color: #000 !important;
+        font-weight: 600;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        mat-icon {
+            color: #000;
+        }
+    }
 }
 
 .main-content {
-    padding: 20px;
+    margin-top: 64px;
     min-height: calc(100vh - 64px);
+    background: #fff;
+}
+
+.create-nav-btn {
+    background: #E61E4D !important;
+    color: white !important;
+    border-radius: 24px !important;
+    font-weight: 600 !important;
+    margin-right: 8px !important;
+
+    mat-icon {
+        margin-right: 4px;
+        color: white !important;
+    }
+
+    &:hover {
+        background: #D70466 !important;
+    }
 }

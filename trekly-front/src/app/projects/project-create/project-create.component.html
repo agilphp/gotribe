@@ -1,28 +1,28 @@
 <div class="container">
     <mat-card>
         <mat-card-header>
-            <mat-card-title>Create New Adventure</mat-card-title>
+            <mat-card-title>{{ 'project.createTitle' | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
             <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
                 <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Title</mat-label>
+                    <mat-label>{{ 'project.title' | translate }}</mat-label>
                     <input matInput formControlName="title">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Description</mat-label>
+                    <mat-label>{{ 'project.description' | translate }}</mat-label>
                     <textarea matInput formControlName="description" rows="3"></textarea>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Activity Type</mat-label>
+                    <mat-label>{{ 'project.activityType' | translate }}</mat-label>
                     <mat-select formControlName="activityType">
-                        <mat-option value="HIKING">Hiking</mat-option>
-                        <mat-option value="RUNNING">Running</mat-option>
-                        <mat-option value="MTB">MTB</mat-option>
-                        <mat-option value="TRIATHLON">Triathlon</mat-option>
-                        <mat-option value="MIXED">Mixed</mat-option>
+                        <mat-option value="HIKING">{{ 'activities.HIKING' | translate }}</mat-option>
+                        <mat-option value="RUNNING">{{ 'activities.RUNNING' | translate }}</mat-option>
+                        <mat-option value="MTB">{{ 'activities.MTB' | translate }}</mat-option>
+                        <mat-option value="TRIATHLON">{{ 'activities.TRIATHLON' | translate }}</mat-option>
+                        <mat-option value="MIXED">{{ 'activities.MIXED' | translate }}</mat-option>
                     </mat-select>
                 </mat-form-field>
 
@@ -31,7 +31,7 @@
                         style="display: none;">
                     <button type="button" mat-stroked-button color="primary" (click)="fileInput.click()"
                         style="margin-bottom: 15px;">
-                        <mat-icon>upload</mat-icon> Upload Image
+                        <mat-icon>upload</mat-icon> {{ 'project.uploadImage' | translate }}
                     </button>
                     <div *ngIf="imagePreview" class="image-preview">
                         <img [src]="imagePreview" alt="Preview">
@@ -40,34 +40,39 @@
 
                 <div style="display: flex; gap: 15px;">
                     <mat-form-field appearance="outline" style="flex: 1;">
-                        <mat-label>Start Date</mat-label>
+                        <mat-label>{{ 'project.startDate' | translate }}</mat-label>
                         <input matInput [matDatepicker]="picker" formControlName="startDate">
                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline" style="flex: 1;">
-                        <mat-label>Start Time</mat-label>
+                        <mat-label>{{ 'project.startTime' | translate }}</mat-label>
                         <input matInput type="time" formControlName="startTime">
                     </mat-form-field>
                 </div>
 
                 <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Meeting Point</mat-label>
+                    <mat-label>{{ 'project.meetingPoint' | translate }}</mat-label>
                     <input matInput formControlName="meetingPoint">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Price</mat-label>
+                    <mat-label>{{ 'project.price' | translate }}</mat-label>
                     <input matInput type="number" formControlName="price">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Currency</mat-label>
-                    <input matInput formControlName="currency">
+                    <mat-label>{{ 'project.currency' | translate }}</mat-label>
+                    <mat-select formControlName="currency">
+                        <mat-option *ngFor="let currency of currencies" [value]="currency.code">
+                            {{ currency.name }} ({{ currency.symbol }})
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
 
-                <button mat-raised-button color="primary" type="submit" [disabled]="!projectForm.valid">Create</button>
+                <button mat-raised-button color="primary" type="submit" [disabled]="!projectForm.valid">{{
+                    'project.create' | translate }}</button>
             </form>
         </mat-card-content>
     </mat-card>

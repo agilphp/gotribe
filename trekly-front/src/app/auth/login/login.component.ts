@@ -7,6 +7,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
     selector: 'app-login',
@@ -18,7 +19,8 @@ import { MatButtonModule } from '@angular/material/button';
         MatCardModule,
         MatInputModule,
         MatButtonModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        TranslatePipe
     ],
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']

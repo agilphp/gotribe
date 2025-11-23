@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TermsDialogComponent } from '../terms-dialog/terms-dialog.component';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
     selector: 'app-register',
@@ -25,7 +26,8 @@ import { TermsDialogComponent } from '../terms-dialog/terms-dialog.component';
         MatButtonModule,
         MatSnackBarModule,
         MatCheckboxModule,
-        MatDialogModule
+        MatDialogModule,
+        TranslatePipe
     ],
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss']

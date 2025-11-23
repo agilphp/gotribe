@@ -1,15 +1,41 @@
 <mat-toolbar color="primary" class="app-toolbar">
-    <button mat-icon-button class="menu-icon" aria-label="Menu">
-        <mat-icon>menu</mat-icon>
-    </button>
     <img src="logo.png" alt="GoTribe Logo" class="app-logo" routerLink="/">
     <span class="logo" routerLink="/">TREKLY</span>
     <span class="spacer"></span>
-    <button mat-button routerLink="/projects">Adventures</button>
-    <button mat-button routerLink="/auth/login">Login</button>
-    <button mat-icon-button aria-label="User profile">
-        <mat-icon>account_circle</mat-icon>
+    <button mat-button routerLink="/projects">{{ 'nav.adventures' | translate }}</button>
+
+    <!-- Language Selector -->
+    <button mat-button [matMenuTriggerFor]="langMenu">
+        <mat-icon>language</mat-icon>
+        {{ (currentLang$ | async) === 'es' ? 'ES' : 'EN' }}
     </button>
+    <mat-menu #langMenu="matMenu">
+        <button mat-menu-item (click)="changeLanguage('es')">
+            <span>🇪🇸 Español</span>
+        </button>
+        <button mat-menu-item (click)="changeLanguage('en')">
+            <span>🇬🇧 English</span>
+        </button>
+    </mat-menu>
+
+    <ng-container *ngIf="currentUser$ | async as user; else loginBtn">
+        <button *ngIf="user.role !== 'MEMBER'" mat-raised-button color="accent" routerLink="/projects/create"
+            class="create-nav-btn">
+            <mat-icon>add</mat-icon>
+            {{ 'nav.create' | translate }}
+        </button>
+        <button mat-button (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            {{ 'nav.logout' | translate }}
+        </button>
+    </ng-container>
+
+    <ng-template #loginBtn>
+        <button mat-button routerLink="/auth/login">
+            <mat-icon>login</mat-icon>
+            {{ 'nav.login' | translate }}
+        </button>
+    </ng-template>
 </mat-toolbar>
 
 <div class="main-content">

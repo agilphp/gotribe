@@ -69,6 +69,28 @@ try {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed']);
         }
+    } elseif ($uri === '/api/projects/currencies' && $method === 'GET') {
+        // Get currencies endpoint
+        try {
+            $pdo = new PDO(
+                sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', 
+                    $_ENV['DB_HOST'] ?? 'project-db',
+                    $_ENV['DB_NAME'] ?? 'project_db'
+                ),
+                $_ENV['DB_USER'] ?? 'trekly_user',
+                $_ENV['DB_PASS'] ?? 'trekly_pass',
+                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+            );
+            
+            $currencyRepository = new \App\Infrastructure\Persistence\DoctrineCurrencyRepository($pdo);
+            $getCurrenciesUseCase = new \App\Application\GetCurrenciesUseCase($currencyRepository);
+            
+            $currencies = $getCurrenciesUseCase->execute();
+            echo json_encode($currencies);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to fetch currencies: ' . $e->getMessage()]);
+        }
     } else {
         http_response_code(404);
         echo json_encode(['error' => 'Not Found', 'uri' => $uri, 'method' => $method]);

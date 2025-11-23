@@ -3,6 +3,13 @@ import { RouterOutlet, RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
+import { AuthService } from './auth/auth.service';
+import { TranslationService } from './shared/services/translation.service';
+import { TranslatePipe } from './shared/pipes/translate.pipe';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -12,11 +19,32 @@ import { MatIconModule } from '@angular/material/icon';
     RouterModule,
     MatToolbarModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatMenuModule,
+    CommonModule,
+    TranslatePipe
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
   protected readonly title = signal('TREKLY');
+  currentUser$: Observable<any>;
+  currentLang$: Observable<string>;
+
+  constructor(
+    private authService: AuthService,
+    public translationService: TranslationService
+  ) {
+    this.currentUser$ = this.authService.currentUser;
+    this.currentLang$ = this.translationService.currentLang$;
+  }
+
+  logout() {
+    this.authService.logout();
+  }
+
+  changeLanguage(lang: string) {
+    this.translationService.setLanguage(lang);
+  }
 }

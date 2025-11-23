@@ -2,17 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 import { ProjectService } from '../project.service';
 import { AuthService } from '../../auth/auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { StarRatingComponent } from '../../shared/components/star-rating/star-rating.component';
 import { RatingService } from '../../shared/services/rating.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RateDialogComponent } from '../../shared/components/rate-dialog/rate-dialog.component';
 import { ProjectDetailsDialogComponent } from '../../shared/components/project-details-dialog/project-details-dialog.component';
 import { ParticipationService } from '../../shared/services/participation.service';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
     selector: 'app-project-list',
@@ -22,17 +25,28 @@ import { ParticipationService } from '../../shared/services/participation.servic
         RouterModule,
         MatCardModule,
         MatButtonModule,
+        MatIconModule,
         StarRatingComponent,
-        MatDialogModule
+        MatDialogModule,
+        FormsModule,
+        TranslatePipe
     ],
     templateUrl: './project-list.component.html',
     styleUrls: ['./project-list.component.scss']
 })
 export class ProjectListComponent implements OnInit {
     projects: any[] = [];
+    filteredProjects: any[] = [];
     ratedProjectIds: Set<string> = new Set();
     joinedProjectIds: Set<string> = new Set();
     currentUser$: Observable<any>;
+
+    searchFilters = {
+        city: '',
+        activity: '',
+        date: '',
+        price: ''
+    };
 
     constructor(
         private projectService: ProjectService,
@@ -51,6 +65,7 @@ export class ProjectListComponent implements OnInit {
     loadProjects() {
         this.projectService.getProjects().subscribe(data => {
             this.projects = data;
+            this.filteredProjects = data;
             this.loadRatings();
             this.loadMemberRatings();
             this.loadMemberParticipations();
@@ -151,5 +166,45 @@ export class ProjectListComponent implements OnInit {
 
     getRatedIdsArray() {
         return Array.from(this.ratedProjectIds);
+    }
+
+    applyFilters() {
+        this.filteredProjects = this.projects.filter(project => {
+            // Filter by city (meeting point contains city)
+            if (this.searchFilters.city && !project.meetingPoint?.toLowerCase().includes(this.searchFilters.city.toLowerCase())) {
+                return false;
+            }
+
+            // Filter by activity
+            if (this.searchFilters.activity && project.activityType !== this.searchFilters.activity) {
+                return false;
+            }
+
+            // Filter by date
+            if (this.searchFilters.date) {
+                const projectDate = new Date(project.startDateTime).toISOString().split('T')[0];
+                if (projectDate !== this.searchFilters.date) {
+                    return false;
+                }
+            }
+
+            // Filter by price
+            if (this.searchFilters.price) {
+                const maxPrice = parseInt(this.searchFilters.price);
+                if (this.searchFilters.price === '0') {
+                    // Free only
+                    if (project.price !== 0) {
+                        return false;
+                    }
+                } else {
+                    // Up to max price
+                    if (project.price > maxPrice) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        });
     }
 }

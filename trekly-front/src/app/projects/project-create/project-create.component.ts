@@ -11,6 +11,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+import { CurrencyService } from '../../shared/services/currency.service';
+import { Currency } from '../../shared/models/currency.model';
+import { OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-project-create',
@@ -25,22 +29,25 @@ import { MatIconModule } from '@angular/material/icon';
         MatSelectModule,
         MatSnackBarModule,
         MatDatepickerModule,
-        MatIconModule
+        MatIconModule,
+        TranslatePipe
     ],
     templateUrl: './project-create.component.html',
     styleUrls: ['./project-create.component.scss']
 })
-export class ProjectCreateComponent {
+export class ProjectCreateComponent implements OnInit {
     projectForm: FormGroup;
     imagePreview: string | null = null;
     selectedImage: string | null = null;
+    currencies: Currency[] = [];
 
     constructor(
         private fb: FormBuilder,
         private projectService: ProjectService,
         private router: Router,
         private snackBar: MatSnackBar,
-        private authService: AuthService
+        private authService: AuthService,
+        private currencyService: CurrencyService
     ) {
         this.projectForm = this.fb.group({
             title: ['', Validators.required],
@@ -50,11 +57,27 @@ export class ProjectCreateComponent {
             startTime: ['', Validators.required],
             meetingPoint: ['', Validators.required],
             price: [0, [Validators.required, Validators.min(0)]],
-            currency: ['USD', Validators.required]
+            currency: ['COP', Validators.required]
         });
     }
 
     ngOnInit(): void {
+        // Load currencies
+        this.currencyService.getCurrencies().subscribe({
+            next: (currencies) => {
+                this.currencies = currencies;
+            },
+            error: (error) => {
+                console.error('Error loading currencies:', error);
+                // Fallback to default currencies if API fails
+                this.currencies = [
+                    { id: '1', code: 'USD', name: 'US Dollar', symbol: '$', isActive: true },
+                    { id: '2', code: 'COP', name: 'Colombian Peso', symbol: '$', isActive: true },
+                    { id: '3', code: 'EUR', name: 'Euro', symbol: '€', isActive: true }
+                ];
+            }
+        });
+
         const user = this.authService.currentUserValue;
         if (user && user.role === 'MEMBER') {
             this.snackBar.open('You must be a Creator to create adventures.', 'Close', { duration: 3000 });

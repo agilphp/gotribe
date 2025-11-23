@@ -1,37 +1,37 @@
 <div class="login-container">
     <mat-card>
         <mat-card-header>
-            <mat-card-title>Login to TREKLY</mat-card-title>
+            <mat-card-title>{{ 'auth.loginTitle' | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                 <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Email</mat-label>
-                    <input matInput formControlName="email" placeholder="Ex. pat@example.com">
+                    <mat-label>{{ 'auth.email' | translate }}</mat-label>
+                    <input matInput formControlName="email" [placeholder]="'auth.emailPlaceholder' | translate">
                     <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
-                        Please enter a valid email address
+                        {{ 'auth.emailInvalid' | translate }}
                     </mat-error>
-                    <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
-                        Email is <strong>required</strong>
+                    <mat-error *ngIf="loginForm.get('email')?.hasError('required')"
+                        [innerHTML]="'auth.emailRequired' | translate">
                     </mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Password</mat-label>
+                    <mat-label>{{ 'auth.password' | translate }}</mat-label>
                     <input matInput formControlName="password" type="password">
-                    <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
-                        Password is <strong>required</strong>
+                    <mat-error *ngIf="loginForm.get('password')?.hasError('required')"
+                        [innerHTML]="'auth.passwordRequired' | translate">
                     </mat-error>
                 </mat-form-field>
 
                 <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid"
                     class="full-width">
-                    Login
+                    {{ 'auth.login' | translate }}
                 </button>
             </form>
         </mat-card-content>
         <mat-card-actions align="end">
-            <a routerLink="/auth/register" mat-button color="accent">Create an account</a>
+            <a routerLink="/auth/register" mat-button color="accent">{{ 'auth.createAccount' | translate }}</a>
         </mat-card-actions>
     </mat-card>
 </div>

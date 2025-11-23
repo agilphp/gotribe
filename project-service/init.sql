@@ -14,3 +14,20 @@ CREATE TABLE IF NOT EXISTS projects (
     is_active BOOLEAN DEFAULT TRUE,
     created_at DATETIME NOT NULL
 );
+
+-- Currencies table
+CREATE TABLE IF NOT EXISTS currencies (
+    id VARCHAR(36) PRIMARY KEY,
+    code VARCHAR(3) UNIQUE NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    symbol VARCHAR(5) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insert default currencies
+INSERT INTO currencies (id, code, name, symbol) VALUES
+(UUID(), 'COP', 'Colombian Peso', '$'),
+(UUID(), 'USD', 'US Dollar', '$'),
+(UUID(), 'EUR', 'Euro', '€')
+ON DUPLICATE KEY UPDATE code=code;
