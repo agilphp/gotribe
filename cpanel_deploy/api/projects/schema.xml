@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="trekly_project" defaultIdMethod="native" namespace="Trekly\Project\Domain\Project\Generated">
+    <table name="projects" phpName="Project">
+        <column name="id" type="VARCHAR" size="36" required="true" primaryKey="true"/>
+        <column name="title" type="VARCHAR" size="255" required="true"/>
+        <column name="description" type="LONGVARCHAR" required="false"/>
+        <column name="activity_type" phpName="ActivityType" type="VARCHAR" size="50" required="true"/>
+        <column name="creator_id" phpName="CreatorId" type="VARCHAR" size="36" required="true"/>
+        <column name="start_date_time" phpName="StartDateTime" type="TIMESTAMP" required="true"/>
+        <column name="meeting_point" phpName="MeetingPoint" type="VARCHAR" size="255" required="true"/>
+        <column name="price" type="DECIMAL" size="10" scale="2" required="true" defaultValue="0.00"/>
+        <column name="currency" type="VARCHAR" size="3" required="true" defaultValue="USD"/>
+        <column name="image_url" phpName="ImageUrl" type="LONGVARCHAR" required="false"/>
+        <column name="is_published" phpName="IsPublished" type="BOOLEAN" required="true" defaultValue="false"/>
+        <column name="created_at" phpName="CreatedAt" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
+    </table>
+</database>

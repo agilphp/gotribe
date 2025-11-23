@@ -1,0 +1,33 @@
+{
+    "name": "trekly/project-service",
+    "description": "Project/Adventure Service for TREKLY",
+    "type": "project",
+    "require": {
+        "php": "^8.2",
+        "vlucas/phpdotenv": "^5.5",
+        "doctrine/orm": "^2.17",
+        "doctrine/dbal": "^3.7",
+        "doctrine/migrations": "^3.7",
+        "symfony/cache": "^6.4",
+        "firebase/php-jwt": "^6.11"
+    },
+    "scripts": {
+        "doctrine:schema:create": "vendor/bin/doctrine orm:schema-tool:create",
+        "doctrine:schema:update": "vendor/bin/doctrine orm:schema-tool:update --force",
+        "doctrine:migrations:diff": "vendor/bin/doctrine-migrations diff",
+        "doctrine:migrations:migrate": "vendor/bin/doctrine-migrations migrate --no-interaction"
+    },
+    "autoload": {
+        "psr-4": {
+            "Trekly\\Project\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Trekly Team",
+            "email": "dev@trekly.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

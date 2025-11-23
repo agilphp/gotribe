@@ -35,6 +35,11 @@ try {
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     $method = $_SERVER['REQUEST_METHOD'];
     
+    if ($method === 'GET' && $uri === '/api/auth/health') {
+        echo json_encode(['status' => 'ok', 'service' => 'auth-service']);
+        exit;
+    }
+    
     if ($method === 'POST' && $uri === '/api/auth/register') {
         $registerController->handle();
     } elseif ($method === 'POST' && $uri === '/api/auth/login') {

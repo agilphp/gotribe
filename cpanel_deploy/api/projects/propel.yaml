@@ -1,0 +1,29 @@
+propel:
+  database:
+    connections:
+      trekly_project:
+        adapter: mysql
+        classname: Propel\Runtime\Connection\ConnectionWrapper
+        dsn: "mysql:host=${DB_HOST};dbname=${DB_NAME};charset=utf8mb4"
+        user: ${DB_USER}
+        password: ${DB_PASS}
+        attributes:
+  runtime:
+    defaultConnection: trekly_project
+    connections:
+      - trekly_project
+  generator:
+    defaultConnection: trekly_project
+    connections:
+      - trekly_project
+    objectModel:
+      addClassLevelComment: false
+      addTimeStamp: false
+      namingMethod: underscore
+      baseClass: \Propel\Runtime\ActiveRecord\ActiveRecordInterface
+    paths:
+      schemaDir: .
+      outputDir: src/
+      phpDir: src/Domain/Project/generated
+      migrationDir: migrations
+      sqlDir: sql
