@@ -11,6 +11,9 @@ import { TranslationService } from './shared/services/translation.service';
 import { TranslatePipe } from './shared/pipes/translate.pipe';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -21,6 +24,8 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
+    MatSidenavModule,
+    MatListModule,
     CommonModule,
     TranslatePipe
   ],

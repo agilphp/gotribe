@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Currency;
+namespace Trekly\Project\Domain\Currency;
 
-class Currency
+class Currency implements \JsonSerializable
 {
     private string $id;
     private string $code;
@@ -58,5 +58,10 @@ class Currency
             'symbol' => $this->symbol,
             'isActive' => $this->isActive
         ];
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->toArray();
     }
 }

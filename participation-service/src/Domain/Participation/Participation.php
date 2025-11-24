@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'participations')]
-class Participation
+class Participation implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: 36)]
@@ -55,5 +55,21 @@ class Participation
     public function getProjectId(): string { return $this->projectId; }
     public function getUserId(): string { return $this->userId; }
     public function getStatus(): ParticipationStatus { return $this->status; }
-    public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
+    public function getRequestedAt(): \DateTimeImmutable { return $this->createdAt; }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'projectId' => $this->projectId,
+            'userId' => $this->userId,
+            'status' => $this->status->value,
+            'createdAt' => $this->createdAt->format(\DateTimeInterface::ATOM)
+        ];
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->toArray();
+    }
 }

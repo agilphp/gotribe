@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Currency;
+namespace Trekly\Project\Domain\Currency;
 
 interface CurrencyRepository
 {

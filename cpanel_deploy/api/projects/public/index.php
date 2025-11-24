@@ -21,8 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 try {
-    // Get EntityManager from bootstrap
-    $entityManager = require __DIR__ . '/../bootstrap.php';
+    // Get EntityManager from bootstrap with error handling
+    try {
+        $entityManager = require __DIR__ . '/../bootstrap.php';
+        if (!$entityManager) {
+            throw new \Exception("Bootstrap returned nothing.");
+        }
+    } catch (\Throwable $e) {
+        throw new \Exception("Bootstrap failed: " . $e->getMessage());
+    }
     
     // Setup Repository with Doctrine
     $projectRepository = new DoctrineProjectRepository($entityManager);
@@ -42,6 +49,7 @@ try {
 
     // Router
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    $uri = rtrim($uri, '/'); // Normalize URI: remove trailing slash
     $method = $_SERVER['REQUEST_METHOD'];
 
     // Routes: /api/projects and /api/projects/{id}/publish
@@ -75,18 +83,16 @@ try {
         try {
             $pdo = new PDO(
                 sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', 
-                    $_ENV['DB_HOST'] ?? 'project-db',
-                    $_ENV['DB_NAME'] ?? 'project_db'
+                    $_ENV['DB_HOST'] ?? 'localhost',
+                    $_ENV['DB_NAME'] ?? 'tribew_projects'
                 ),
-                $_ENV['DB_USER'] ?? 'trekly_user',
-                $_ENV['DB_PASS'] ?? 'trekly_pass',
+                $_ENV['DB_USER'] ?? 'tribew_eli4as',
+                $_ENV['DB_PASS'] ?? '8TK4Nqp8d9SX4uxa',
                 [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
             );
             
-            $currencyRepository = new \App\Infrastructure\Persistence\DoctrineCurrencyRepository($pdo);
-            $getCurrenciesUseCase = new \App\Application\GetCurrenciesUseCase($currencyRepository);
-            
-            $currencies = $getCurrenciesUseCase->execute();
+            $currencyRepository = new \Trekly\Project\Infrastructure\Persistence\DoctrineCurrencyRepository($pdo);
+            $currencies = $currencyRepository->findAll();
             echo json_encode($currencies);
         } catch (\Exception $e) {
             http_response_code(500);
@@ -98,5 +104,9 @@ try {
     }
 } catch (\Exception $e) {
     http_response_code(500);
-    echo json_encode(['error' => $e->getMessage()]);
+    echo json_encode([
+        'error' => 'Internal Server Error: ' . $e->getMessage(),
+        'trace' => $e->getTraceAsString(),
+        'env_vars_loaded' => !empty($_ENV)
+    ]);
 }

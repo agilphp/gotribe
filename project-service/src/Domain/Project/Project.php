@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'projects')]
-class Project
+class Project implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: 36)]
@@ -139,5 +139,30 @@ class Project
         if ($this->startDateTime < $now && $this->isActive) {
             $this->deactivate();
         }
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'activityType' => $this->activityType->value,
+            'creatorId' => $this->creatorId,
+            'startDateTime' => $this->startDateTime->format(\DateTimeInterface::ATOM),
+            'meetingPoint' => $this->meetingPoint,
+            'price' => $this->price,
+            'currency' => $this->currency,
+            'maxGuests' => $this->maxGuests,
+            'imageUrl' => $this->imageUrl,
+            'isPublished' => $this->isPublished,
+            'isActive' => $this->isActive,
+            'createdAt' => $this->createdAt->format(\DateTimeInterface::ATOM)
+        ];
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->toArray();
     }
 }

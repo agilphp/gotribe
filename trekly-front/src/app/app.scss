@@ -1,3 +1,15 @@
+.sidenav-container {
+    height: 100vh;
+}
+
+.sidenav {
+    width: 250px;
+
+    mat-nav-list {
+        padding-top: 20px;
+    }
+}
+
 .app-toolbar {
     position: sticky;
     top: 0;
@@ -5,11 +17,21 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.menu-button {
+    display: none; // Hidden by default on desktop
+    margin-right: 8px;
+}
+
 .logo {
     font-weight: 700;
     letter-spacing: 1px;
     cursor: pointer;
     margin-left: 10px;
+}
+
+.desktop-nav {
+    display: flex;
+    align-items: center;
 }
 
 .main-content {
@@ -20,4 +42,19 @@
 
 .spacer {
     flex: 1 1 auto;
+}
+
+// Mobile Responsiveness
+@media (max-width: 768px) {
+    .menu-button {
+        display: block; // Show hamburger on mobile
+    }
+
+    .desktop-nav {
+        display: none; // Hide desktop nav links on mobile
+    }
+
+    .main-content {
+        padding: 10px; // Reduce padding on mobile
+    }
 }

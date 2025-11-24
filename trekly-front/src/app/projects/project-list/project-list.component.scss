@@ -28,6 +28,14 @@
     &:hover {
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
     }
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        border-radius: 24px;
+        padding: 16px;
+        gap: 12px;
+        align-items: stretch;
+    }
 }
 
 .search-field {
@@ -60,12 +68,25 @@
     select {
         cursor: pointer;
     }
+
+    @media (max-width: 768px) {
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
 }
 
 .search-divider {
     width: 1px;
     height: 32px;
     background: #dddddd;
+
+    @media (max-width: 768px) {
+        display: none;
+    }
 }
 
 .search-button {
@@ -94,6 +115,13 @@
         font-size: 20px;
         width: 20px;
         height: 20px;
+    }
+
+    @media (max-width: 768px) {
+        width: 100%;
+        justify-content: center;
+        margin-top: 8px;
+        padding: 14px;
     }
 }
 

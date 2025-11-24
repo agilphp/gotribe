@@ -1,47 +1,91 @@
-<mat-toolbar color="primary" class="app-toolbar">
-    <img src="logo.png" alt="GoTribe Logo" class="app-logo" routerLink="/">
-    <span class="logo" routerLink="/">GoTribe</span>
-    <span class="spacer"></span>
-    <button mat-button routerLink="/projects">{{ 'nav.adventures' | translate }}</button>
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #sidenav mode="over" class="sidenav">
+        <mat-nav-list>
+            <a mat-list-item routerLink="/" (click)="sidenav.close()">
+                <mat-icon matListItemIcon>home</mat-icon>
+                <span matListItemTitle>Home</span>
+            </a>
+            <a mat-list-item routerLink="/projects" (click)="sidenav.close()">
+                <mat-icon matListItemIcon>explore</mat-icon>
+                <span matListItemTitle>{{ 'nav.adventures' | translate }}</span>
+            </a>
+            <ng-container *ngIf="currentUser$ | async as user; else mobileLogin">
+                <a *ngIf="user.role !== 'MEMBER'" mat-list-item routerLink="/projects/create" (click)="sidenav.close()">
+                    <mat-icon matListItemIcon>add</mat-icon>
+                    <span matListItemTitle>{{ 'nav.create' | translate }}</span>
+                </a>
+                <a *ngIf="user.role === 'CREATOR'" mat-list-item routerLink="/scanner" (click)="sidenav.close()">
+                    <mat-icon matListItemIcon>qr_code_scanner</mat-icon>
+                    <span matListItemTitle>{{ 'nav.scanner' | translate }}</span>
+                </a>
+                <a mat-list-item (click)="logout(); sidenav.close()">
+                    <mat-icon matListItemIcon>logout</mat-icon>
+                    <span matListItemTitle>{{ 'nav.logout' | translate }}</span>
+                </a>
+            </ng-container>
+            <ng-template #mobileLogin>
+                <a mat-list-item routerLink="/auth/login" (click)="sidenav.close()">
+                    <mat-icon matListItemIcon>login</mat-icon>
+                    <span matListItemTitle>{{ 'nav.login' | translate }}</span>
+                </a>
+            </ng-template>
+        </mat-nav-list>
+    </mat-sidenav>
 
-    <!-- Language Selector -->
-    <button mat-button [matMenuTriggerFor]="langMenu">
-        <mat-icon>language</mat-icon>
-        {{ (currentLang$ | async) === 'es' ? 'ES' : 'EN' }}
-    </button>
-    <mat-menu #langMenu="matMenu">
-        <button mat-menu-item (click)="changeLanguage('es')">
-            <span>🇪🇸 Español</span>
-        </button>
-        <button mat-menu-item (click)="changeLanguage('en')">
-            <span>🇬🇧 English</span>
-        </button>
-    </mat-menu>
+    <mat-sidenav-content>
+        <mat-toolbar color="primary" class="app-toolbar">
+            <button mat-icon-button (click)="sidenav.toggle()" class="menu-button">
+                <mat-icon>menu</mat-icon>
+            </button>
 
-    <ng-container *ngIf="currentUser$ | async as user; else loginBtn">
-        <button *ngIf="user.role !== 'MEMBER'" mat-raised-button color="accent" routerLink="/projects/create"
-            class="create-nav-btn">
-            <mat-icon>add</mat-icon>
-            {{ 'nav.create' | translate }}
-        </button>
-        <button *ngIf="user.role === 'CREATOR'" mat-button routerLink="/scanner" class="scanner-nav-btn">
-            <mat-icon>qr_code_scanner</mat-icon>
-            {{ 'nav.scanner' | translate }}
-        </button>
-        <button mat-button (click)="logout()">
-            <mat-icon>logout</mat-icon>
-            {{ 'nav.logout' | translate }}
-        </button>
-    </ng-container>
+            <img src="logo.png" alt="GoTribe Logo" class="app-logo" routerLink="/">
+            <span class="logo" routerLink="/">GoTribe</span>
+            <span class="spacer"></span>
 
-    <ng-template #loginBtn>
-        <button mat-button routerLink="/auth/login">
-            <mat-icon>login</mat-icon>
-            {{ 'nav.login' | translate }}
-        </button>
-    </ng-template>
-</mat-toolbar>
+            <div class="desktop-nav">
+                <button mat-button routerLink="/projects">{{ 'nav.adventures' | translate }}</button>
 
-<div class="main-content">
-    <router-outlet></router-outlet>
-</div>
+                <!-- Language Selector -->
+                <button mat-button [matMenuTriggerFor]="langMenu">
+                    <mat-icon>language</mat-icon>
+                    {{ (currentLang$ | async) === 'es' ? 'ES' : 'EN' }}
+                </button>
+                <mat-menu #langMenu="matMenu">
+                    <button mat-menu-item (click)="changeLanguage('es')">
+                        <span>🇪🇸 Español</span>
+                    </button>
+                    <button mat-menu-item (click)="changeLanguage('en')">
+                        <span>🇬🇧 English</span>
+                    </button>
+                </mat-menu>
+
+                <ng-container *ngIf="currentUser$ | async as user; else loginBtn">
+                    <button *ngIf="user.role !== 'MEMBER'" mat-raised-button color="accent"
+                        routerLink="/projects/create" class="create-nav-btn">
+                        <mat-icon>add</mat-icon>
+                        {{ 'nav.create' | translate }}
+                    </button>
+                    <button *ngIf="user.role === 'CREATOR'" mat-button routerLink="/scanner" class="scanner-nav-btn">
+                        <mat-icon>qr_code_scanner</mat-icon>
+                        {{ 'nav.scanner' | translate }}
+                    </button>
+                    <button mat-button (click)="logout()">
+                        <mat-icon>logout</mat-icon>
+                        {{ 'nav.logout' | translate }}
+                    </button>
+                </ng-container>
+
+                <ng-template #loginBtn>
+                    <button mat-button routerLink="/auth/login">
+                        <mat-icon>login</mat-icon>
+                        {{ 'nav.login' | translate }}
+                    </button>
+                </ng-template>
+            </div>
+        </mat-toolbar>
+
+        <div class="main-content">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

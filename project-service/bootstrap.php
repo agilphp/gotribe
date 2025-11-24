@@ -21,10 +21,10 @@ $config = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
 // Database connection parameters
 $connectionParams = [
     'driver' => 'pdo_mysql',
-    'host' => $_ENV['DB_HOST'] ?? 'project-db',
-    'dbname' => $_ENV['DB_NAME'] ?? 'project_db',
-    'user' => $_ENV['DB_USER'] ?? 'trekly_user',
-    'password' => $_ENV['DB_PASS'] ?? 'trekly_pass',
+    'host' => $_ENV['DB_HOST'] ?? 'localhost',
+    'dbname' => $_ENV['DB_NAME'] ?? 'tribew_projects',
+    'user' => $_ENV['DB_USER'] ?? 'tribew_eli4as',
+    'password' => $_ENV['DB_PASS'] ?? '8TK4Nqp8d9SX4uxa',
     'charset' => 'utf8mb4',
 ];
 

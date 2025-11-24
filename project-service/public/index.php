@@ -21,8 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 try {
-    // Get EntityManager from bootstrap
-    $entityManager = require __DIR__ . '/../bootstrap.php';
+    // Get EntityManager from bootstrap with error handling
+    try {
+        $entityManager = require __DIR__ . '/../bootstrap.php';
+        if (!$entityManager) {
+            throw new \Exception("Bootstrap returned nothing.");
+        }
+    } catch (\Throwable $e) {
+        throw new \Exception("Bootstrap failed: " . $e->getMessage());
+    }
     
     // Setup Repository with Doctrine
     $projectRepository = new DoctrineProjectRepository($entityManager);
@@ -42,17 +49,23 @@ try {
 
     // Router
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    $uri = rtrim($uri, '/'); // Normalize URI: remove trailing slash
     $method = $_SERVER['REQUEST_METHOD'];
+
+    // DEBUG: Log request details
+    error_log("DEBUG - URI: $uri, Method: $method, Raw Body: " . file_get_contents('php://input'));
 
     // Routes: /api/projects and /api/projects/{id}/publish
     if ($uri === '/api/projects') {
         if ($method === 'POST') {
+            error_log("DEBUG - Calling create() method");
             $controller->create();
         } elseif ($method === 'GET') {
+            error_log("DEBUG - Calling list() method");
             $controller->list();
         } else {
             http_response_code(405);
-            echo json_encode(['error' => 'Method Not Allowed']);
+            echo json_encode(['error' => 'Method Not Allowed', 'received_method' => $method, 'uri' => $uri]);
         }
     } elseif (preg_match('#^/api/projects/([^/]+)/publish$#', $uri, $matches)) {
         $id = $matches[1];
@@ -62,6 +75,26 @@ try {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed']);
         }
+    } elseif ($uri === '/api/projects/currencies' && $method === 'GET') {
+        // Get currencies endpoint
+        try {
+            $pdo = new PDO(
+                sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4',
+                    $_ENV['DB_HOST'] ?? 'localhost',
+                    $_ENV['DB_NAME'] ?? 'tribew_projects'
+                ),
+                $_ENV['DB_USER'] ?? 'tribew_eli4as',
+                $_ENV['DB_PASS'] ?? '8TK4Nqp8d9SX4uxa',
+                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+            );
+
+            $currencyRepository = new \Trekly\Project\Infrastructure\Persistence\DoctrineCurrencyRepository($pdo);
+            $currencies = $currencyRepository->findAll();
+            echo json_encode($currencies);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to fetch currencies: ' . $e->getMessage()]);
+        }
     } elseif (preg_match('#^/api/projects/([^/]+)$#', $uri, $matches)) {
         $id = $matches[1];
         if ($method === 'GET') {
@@ -70,33 +103,15 @@ try {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed']);
         }
-    } elseif ($uri === '/api/projects/currencies' && $method === 'GET') {
-        // Get currencies endpoint
-        try {
-            $pdo = new PDO(
-                sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', 
-                    $_ENV['DB_HOST'] ?? 'project-db',
-                    $_ENV['DB_NAME'] ?? 'project_db'
-                ),
-                $_ENV['DB_USER'] ?? 'trekly_user',
-                $_ENV['DB_PASS'] ?? 'trekly_pass',
-                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-            );
-            
-            $currencyRepository = new \App\Infrastructure\Persistence\DoctrineCurrencyRepository($pdo);
-            $getCurrenciesUseCase = new \App\Application\GetCurrenciesUseCase($currencyRepository);
-            
-            $currencies = $getCurrenciesUseCase->execute();
-            echo json_encode($currencies);
-        } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode(['error' => 'Failed to fetch currencies: ' . $e->getMessage()]);
-        }
     } else {
         http_response_code(404);
         echo json_encode(['error' => 'Not Found', 'uri' => $uri, 'method' => $method]);
     }
 } catch (\Exception $e) {
     http_response_code(500);
-    echo json_encode(['error' => $e->getMessage()]);
+    echo json_encode([
+        'error' => 'Internal Server Error: ' . $e->getMessage(),
+        'trace' => $e->getTraceAsString(),
+        'env_vars_loaded' => !empty($_ENV)
+    ]);
 }

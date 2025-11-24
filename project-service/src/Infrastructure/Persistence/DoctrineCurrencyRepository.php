@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Infrastructure\Persistence;
+namespace Trekly\Project\Infrastructure\Persistence;
 
-use App\Domain\Currency\Currency;
-use App\Domain\Currency\CurrencyRepository;
+use Trekly\Project\Domain\Currency\Currency;
+use Trekly\Project\Domain\Currency\CurrencyRepository;
 use PDO;
 
 class DoctrineCurrencyRepository implements CurrencyRepository

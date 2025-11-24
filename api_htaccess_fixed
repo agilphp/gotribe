@@ -1,0 +1,22 @@
+# Force PHP 8.4
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php84 .php .php8 .phtml
+</IfModule>
+
+# Enable rewrite engine
+RewriteEngine On
+
+# Prevent Apache from redirecting /api/projects to /api/projects/
+DirectorySlash Off
+
+# Preserve Authorization header (Method 1: RewriteRule)
+RewriteCond %{HTTP:Authorization} .+
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Preserve Authorization header (Method 2: SetEnvIf - often required for FastCGI)
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
+# Route EVERYTHING to index.php (the router)
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php [L,QSA]

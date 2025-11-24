@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Preserve Authorization header
+    RewriteCond %{HTTP:Authorization} ^(.*)
+    RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+    
+    # Redirect all requests to public/index.php while preserving the request method
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/index.php [QSA,L]
+</IfModule>

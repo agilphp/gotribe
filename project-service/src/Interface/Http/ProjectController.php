@@ -75,7 +75,22 @@ class ProjectController
 
         if ($userRole === 'MEMBER') {
             http_response_code(403);
-            echo json_encode(['error' => 'Only CREATOR and ADMIN users can create projects']);
+            $debugHeaders = [];
+            if (function_exists('apache_request_headers')) {
+                $debugHeaders = apache_request_headers();
+            }
+            // Fallback to $_SERVER
+            foreach ($_SERVER as $key => $value) {
+                if (strpos($key, 'HTTP_') === 0) {
+                    $debugHeaders[$key] = $value;
+                }
+            }
+            
+            echo json_encode([
+                'error' => 'Only CREATOR and ADMIN users can create projects. Current role: ' . $userRole . '. Creator ID: ' . $creatorId,
+                'debug_headers' => $debugHeaders,
+                'env_jwt_secret_exists' => !empty($_ENV['JWT_SECRET'])
+            ]);
             return;
         }
 

@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# Preserve Authorization header
+RewriteCond %{HTTP:Authorization} .+
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Redirect to public/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ public/index.php [L,QSA]
