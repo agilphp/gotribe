@@ -1,0 +1,37 @@
+﻿CREATE TABLE `cuentas_por_pagar` (
+  `id` varchar(36) NOT NULL,
+  `creator_id` varchar(36) NOT NULL,
+  `project_id` varchar(36) NOT NULL,
+  `monto` decimal(10,2) NOT NULL,
+  `estado` enum('PENDIENTE','PAGADA','VENCIDA') DEFAULT 'PENDIENTE',
+  `fecha_creacion` datetime NOT NULL,
+  `fecha_vencimiento` datetime NOT NULL,
+  `fecha_pago` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `currencies`
+--
+
+CREATE TABLE `currencies` (
+  `id` varchar(36) NOT NULL,
+  `code` varchar(3) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `symbol` varchar(5) NOT NULL,
+  `is_active` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `currencies`
+--
+
+INSERT INTO `currencies` (`id`, `code`, `name`, `symbol`, `is_active`, `created_at`) VALUES
+('9190fa5e-c8d5-11f0-8800-fa163ec700a2', 'COP', 'Colombian Peso', '$', 1, '2025-11-24 01:33:24'),
+('9190ff32-c8d5-11f0-8800-fa163ec700a2', 'USD', 'US Dollar', '$', 1, '2025-11-24 01:33:24'),
+('91910039-c8d5-11f0-8800-fa163ec700a2', 'EUR', 'Euro', 'â‚¬', 1, '2025-11-24 01:33:24');
+
+-- --------------------------------------------------------
+

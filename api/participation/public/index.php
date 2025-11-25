@@ -8,6 +8,7 @@ use Trekly\Participation\Application\UpdateParticipationStatusUseCase;
 use Trekly\Participation\Interface\Http\ParticipationController;
 use Trekly\Participation\Infrastructure\Http\ProjectServiceClient;
 use Trekly\Participation\Infrastructure\Http\AuthServiceClient;
+use Trekly\Participation\Infrastructure\Http\PaymentServiceClient;
 use Trekly\Participation\Infrastructure\Email\EmailService;
 use Trekly\Participation\Infrastructure\Services\TicketService;
 
@@ -27,12 +28,13 @@ try {
     $repository = new DoctrineParticipationRepository($entityManager);
     $projectClient = new ProjectServiceClient();
     $authClient = new AuthServiceClient();
+    $paymentClient = new PaymentServiceClient();
     $emailService = new EmailService();
     $ticketService = new TicketService();
     
     $requestUseCase = new RequestParticipationUseCase($repository, $projectClient, $authClient, $emailService, $ticketService);
     $updateStatusUseCase = new UpdateParticipationStatusUseCase($repository);
-    $validateUseCase = new \Trekly\Participation\Application\ValidateParticipationUseCase($repository);
+    $validateUseCase = new \Trekly\Participation\Application\ValidateParticipationUseCase($repository, $projectClient, $paymentClient);
     
     $controller = new ParticipationController($requestUseCase, $updateStatusUseCase, $validateUseCase, $repository);
     

@@ -45,6 +45,20 @@ class PDOCuentaPorPagarRepository implements CuentaPorPagarRepository
         return $result ?: null;
     }
     
+    public function updateMonto(string $cuentaId, float $newMonto): void
+    {
+        $stmt = $this->pdo->prepare('
+            UPDATE cuentas_por_pagar 
+            SET monto = :monto
+            WHERE id = :id
+        ');
+        
+        $stmt->execute([
+            ':monto' => $newMonto,
+            ':id' => $cuentaId
+        ]);
+    }
+    
     public function registrarPago(array $data): void
     {
         // Insert payment record
