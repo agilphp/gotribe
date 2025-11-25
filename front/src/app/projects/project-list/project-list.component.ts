@@ -16,6 +16,7 @@ import { RateDialogComponent } from '../../shared/components/rate-dialog/rate-di
 import { ProjectDetailsDialogComponent } from '../../shared/components/project-details-dialog/project-details-dialog.component';
 import { ParticipationService } from '../../shared/services/participation.service';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+import { UiService } from '../../shared/services/ui.service';
 
 @Component({
     selector: 'app-project-list',
@@ -55,26 +56,40 @@ export class ProjectListComponent implements OnInit {
         private authService: AuthService,
         private dialog: MatDialog,
         private ratingService: RatingService,
-        private participationService: ParticipationService
+        private participationService: ParticipationService,
+        private uiService: UiService
     ) {
         this.currentUser$ = this.authService.currentUser;
     }
 
     ngOnInit(): void {
         this.loadProjects();
-        if (window.innerWidth <= 768) {
-            window.addEventListener('scroll', this.handleScroll, true);
-        }
+
+        // Subscribe to UI service for search visibility
+        this.uiService.isSearchVisible$.subscribe(visible => {
+            // On mobile, respect the service state
+            if (window.innerWidth <= 768) {
+                this.showSearchBar = visible;
+            } else {
+                // On desktop, always show
+                this.showSearchBar = true;
+            }
+        });
+
+        // Handle window resize to reset state if needed
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                this.showSearchBar = true;
+            } else {
+                // Re-sync with service state on mobile
+                // We might want to keep it hidden or sync with service
+                // For now, let's just respect the current service value which might be false
+            }
+        });
     }
 
     ngOnDestroy(): void {
-        window.removeEventListener('scroll', this.handleScroll, true);
-    }
-
-    handleScroll = () => {
-        if (window.innerWidth > 768) return;
-        const scrollY = window.scrollY || window.pageYOffset;
-        this.showSearchBar = scrollY < 100;
+        // window.removeEventListener('scroll', this.handleScroll, true);
     }
 
     loadProjects() {

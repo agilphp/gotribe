@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { AuthService } from './auth/auth.service';
 import { TranslationService } from './shared/services/translation.service';
 import { TranslatePipe } from './shared/pipes/translate.pipe';
+import { UiService } from './shared/services/ui.service';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -42,7 +43,8 @@ export class App {
 
   constructor(
     private authService: AuthService,
-    public translationService: TranslationService
+    public translationService: TranslationService,
+    private uiService: UiService
   ) {
     this.currentUser$ = this.authService.currentUser;
     this.currentLang$ = this.translationService.currentLang$;
@@ -54,5 +56,9 @@ export class App {
 
   changeLanguage(lang: string) {
     this.translationService.setLanguage(lang);
+  }
+
+  toggleSearch() {
+    this.uiService.toggleSearch();
   }
 }
