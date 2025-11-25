@@ -1,1 +1,67 @@
+# Node modules
+node_modules/
+
+# Build output
+/dist/
+/build/
+
+# Environment files
+.env
+.env.*
+
+# IDE/editor config
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Angular cache
+.angular/
+
+# Compiled files
+*.tsbuildinfo
+
+# Coverage reports
+coverage/
+
+# Dependency directories
+vendor/
+
+# PHP specific
+*.lock
+composer.lock
+
+# Misc
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Others
+public/error_log
+api/*/error_log
+projects/error_log
+
+# Ignore uploads and generated assets
+uploads/
+assets/
+
+# Ignore database and migration files
+*.sql
+migrations/
+
+# Ignore generated files
+*.pdf
 *.zip
+*.tar.gz
+
+# Ignore translations if generated
+src/assets/i18n/*.json
+
+# Old project files
+/old/

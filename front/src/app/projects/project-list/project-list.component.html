@@ -1,0 +1,95 @@
+<!-- Search Bar Section -->
+<div class="search-section" *ngIf="showSearchBar">
+    <div class="search-container">
+        <div class="search-bar">
+            <div class="search-field">
+                <label>{{ 'search.city' | translate }}</label>
+                <input type="text" [placeholder]="'search.cityPlaceholder' | translate"
+                    [(ngModel)]="searchFilters.city">
+            </div>
+            <div class="search-divider"></div>
+            <div class="search-field">
+                <label>{{ 'search.activity' | translate }}</label>
+                <select [(ngModel)]="searchFilters.activity">
+                    <option value="">{{ 'search.allActivities' | translate }}</option>
+                    <option value="HIKING">{{ 'activities.HIKING' | translate }}</option>
+                    <option value="RUNNING">{{ 'activities.RUNNING' | translate }}</option>
+                    <option value="MTB">{{ 'activities.MTB' | translate }}</option>
+                    <option value="TRIATHLON">{{ 'activities.TRIATHLON' | translate }}</option>
+                </select>
+            </div>
+            <div class="search-divider"></div>
+            <div class="search-field">
+                <label>{{ 'search.date' | translate }}</label>
+                <input type="date" [(ngModel)]="searchFilters.date">
+            </div>
+            <div class="search-divider"></div>
+            <div class="search-field">
+                <label>{{ 'search.price' | translate }}</label>
+                <select [(ngModel)]="searchFilters.price">
+                    <option value="">{{ 'search.anyPrice' | translate }}</option>
+                    <option value="0">{{ 'search.free' | translate }}</option>
+                    <option value="50">{{ 'search.upTo' | translate }} $50</option>
+                    <option value="100">{{ 'search.upTo' | translate }} $100</option>
+                    <option value="200">{{ 'search.upTo' | translate }} $200</option>
+                </select>
+            </div>
+            <button class="search-button" (click)="applyFilters()">
+                <mat-icon>search</mat-icon>
+                {{ 'search.search' | translate }}
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Projects Grid -->
+<div class="container">
+    <div class="projects-grid">
+        <mat-card *ngFor="let project of filteredProjects" class="project-card" (click)="openDetailsDialog(project)">
+            <div class="card-image-container">
+                <img mat-card-image [src]="project.imageUrl || getImageForActivity(project.activityType)"
+                    alt="Activity Image">
+            </div>
+            <mat-card-content class="card-content">
+                <div class="card-header">
+                    <h3 class="card-title">{{ project.title }}</h3>
+                    <div class="card-price">
+                        <span class="price-amount">${{ project.price }}</span>
+                        <span class="price-currency">{{ project.currency }}</span>
+                    </div>
+                </div>
+
+                <div class="card-meta">
+                    <span class="activity-badge">{{ 'activities.' + project.activityType | translate }}</span>
+                    <span class="date-info">{{ project.startDateTime | date:'MMM d' }}</span>
+                </div>
+
+                <div class="creator-rating" *ngIf="project.creatorRating > 0">
+                    <app-star-rating [rating]="project.creatorRating" [readonly]="true"></app-star-rating>
+                    <span class="rating-count">({{ project.creatorTotalRatings }})</span>
+                </div>
+
+                <div class="card-actions" (click)="$event.stopPropagation()">
+                    <ng-container *ngIf="currentUser$ | async as user">
+                        <button
+                            *ngIf="user.role === 'MEMBER' && !joinedProjectIds.has(project.id) && user.userId !== project.creatorId"
+                            mat-raised-button color="accent" (click)="joinProject(project.id)" class="join-btn">
+                            {{ 'project.join' | translate }}
+                        </button>
+                        <span *ngIf="user.role === 'MEMBER' && joinedProjectIds.has(project.id)" class="joined-badge">
+                            <mat-icon>check_circle</mat-icon>
+                            {{ 'project.joined' | translate }}
+                        </span>
+                        <button
+                            *ngIf="user.role === 'MEMBER' && !ratedProjectIds.has(project.creatorId) && joinedProjectIds.has(project.id)"
+                            mat-button color="primary" (click)="openRateDialog(project.id, project.creatorId)"
+                            class="rate-btn">
+                            <mat-icon>star</mat-icon>
+                            {{ 'project.rate' | translate }}
+                        </button>
+                    </ng-container>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

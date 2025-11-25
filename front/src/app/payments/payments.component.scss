@@ -1,0 +1,25 @@
+
+.alert-danger {
+  color: #fff;
+  background: #d9534f;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+button {
+  margin: 5px;
+}
+
+form {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+}
+label {
+  margin-top: 10px;
+}
+input, select {
+  margin-bottom: 10px;
+}

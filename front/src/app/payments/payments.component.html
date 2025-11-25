@@ -1,0 +1,27 @@
+<div *ngIf="isCreator">
+  <div *ngIf="cuentasVencidas.length > 0" class="alert alert-danger">
+    Tienes cuentas vencidas. No puedes crear nuevas aventuras hasta que pagues.
+  </div>
+  <button [disabled]="!puedeCrearAventura">Crear nueva aventura</button>
+  <h3>Cuentas por pagar</h3>
+  <ul>
+    <li *ngFor="let cuenta of cuentas">
+      {{ cuenta.project_id }} - {{ cuenta.monto }} - {{ cuenta.estado }}
+      <button *ngIf="cuenta.estado === 'PENDIENTE'" (click)="seleccionarCuenta(cuenta)">
+        Registrar pago
+      </button>
+    </li>
+  </ul>
+
+  <form *ngIf="cuentaSeleccionada" (ngSubmit)="enviarPago()">
+    <label>Método de pago:</label>
+    <select [(ngModel)]="pago.metodo_pago" name="metodo_pago" required>
+      <option value="transferencia">Transferencia</option>
+      <option value="tarjeta">Tarjeta</option>
+      <option value="efectivo">Efectivo</option>
+    </select>
+    <label>Referencia:</label>
+    <input [(ngModel)]="pago.referencia_pago" name="referencia_pago" required>
+    <button type="submit">Enviar pago</button>
+  </form>
+</div>

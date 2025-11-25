@@ -1,0 +1,108 @@
+[24-Nov-2025 13:18:42 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php(25): require()
+#1 /home/tribew/public_html/api/auth/vendor/autoload.php(22): ComposerAutoloaderInitd3c84adce2092413a750d9fc41144dd8::getLoader()
+#2 /home/tribew/public_html/api/auth/bootstrap.php(6): require_once('/home/tribew/pu...')
+#3 /home/tribew/public_html/api/auth/public/index.php(3): require_once('/home/tribew/pu...')
+#4 {main}
+  thrown in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php on line 22
+[24-Nov-2025 13:34:14 UTC] PHP Warning:  require(/home/tribew/public_html/api/auth/vendor/composer/../symfony/deprecation-contracts/function.php): Failed to open stream: Permission denied in /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php on line 41
+[24-Nov-2025 13:34:14 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/tribew/public_html/api/auth/vendor/composer/../symfony/deprecation-contracts/function.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php(45): {closure}('6e3fae29631ef28...', '/home/tribew/pu...')
+#1 /home/tribew/public_html/api/auth/vendor/autoload.php(22): ComposerAutoloaderInitd3c84adce2092413a750d9fc41144dd8::getLoader()
+#2 /home/tribew/public_html/api/auth/bootstrap.php(6): require_once('/home/tribew/pu...')
+#3 /home/tribew/public_html/api/auth/public/index.php(3): require_once('/home/tribew/pu...')
+#4 {main}
+  thrown in /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php on line 41
+[24-Nov-2025 13:39:41 UTC] PHP Warning:  require(/home/tribew/public_html/api/auth/vendor/composer/../symfony/deprecation-contracts/function.php): Failed to open stream: Permission denied in /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php on line 41
+[24-Nov-2025 13:39:41 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/tribew/public_html/api/auth/vendor/composer/../symfony/deprecation-contracts/function.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php(45): {closure}('6e3fae29631ef28...', '/home/tribew/pu...')
+#1 /home/tribew/public_html/api/auth/vendor/autoload.php(22): ComposerAutoloaderInitd3c84adce2092413a750d9fc41144dd8::getLoader()
+#2 /home/tribew/public_html/api/auth/bootstrap.php(6): require_once('/home/tribew/pu...')
+#3 /home/tribew/public_html/api/auth/public/index.php(3): require_once('/home/tribew/pu...')
+#4 {main}
+  thrown in /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php on line 41
+[24-Nov-2025 13:40:03 UTC] PHP Warning:  require(/home/tribew/public_html/api/auth/vendor/composer/../symfony/deprecation-contracts/function.php): Failed to open stream: Permission denied in /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php on line 41
+[24-Nov-2025 13:40:03 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/tribew/public_html/api/auth/vendor/composer/../symfony/deprecation-contracts/function.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php(45): {closure}('6e3fae29631ef28...', '/home/tribew/pu...')
+#1 /home/tribew/public_html/api/auth/vendor/autoload.php(22): ComposerAutoloaderInitd3c84adce2092413a750d9fc41144dd8::getLoader()
+#2 /home/tribew/public_html/api/auth/bootstrap.php(6): require_once('/home/tribew/pu...')
+#3 /home/tribew/public_html/api/auth/public/index.php(3): require_once('/home/tribew/pu...')
+#4 {main}
+  thrown in /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php on line 41
+[24-Nov-2025 13:48:59 UTC] PHP Warning:  require(/home/tribew/public_html/api/auth/vendor/composer/../symfony/deprecation-contracts/function.php): Failed to open stream: Permission denied in /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php on line 41
+[24-Nov-2025 13:48:59 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/tribew/public_html/api/auth/vendor/composer/../symfony/deprecation-contracts/function.php' (include_path='.:/opt/cpanel/ea-php83/root/usr/share/pear') in /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php(45): {closure}('6e3fae29631ef28...', '/home/tribew/pu...')
+#1 /home/tribew/public_html/api/auth/vendor/autoload.php(22): ComposerAutoloaderInitd3c84adce2092413a750d9fc41144dd8::getLoader()
+#2 /home/tribew/public_html/api/auth/bootstrap.php(6): require_once('/home/tribew/pu...')
+#3 /home/tribew/public_html/api/auth/public/index.php(3): require_once('/home/tribew/pu...')
+#4 {main}
+  thrown in /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php on line 41
+[24-Nov-2025 14:46:03 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php(25): require()
+#1 /home/tribew/public_html/api/auth/vendor/autoload.php(22): ComposerAutoloaderInitd3c84adce2092413a750d9fc41144dd8::getLoader()
+#2 /home/tribew/public_html/api/auth/bootstrap.php(6): require_once('/home/tribew/pu...')
+#3 /home/tribew/public_html/api/auth/public/index.php(3): require_once('/home/tribew/pu...')
+#4 {main}
+  thrown in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php on line 22
+[24-Nov-2025 14:47:49 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php(25): require()
+#1 /home/tribew/public_html/api/auth/vendor/autoload.php(22): ComposerAutoloaderInitd3c84adce2092413a750d9fc41144dd8::getLoader()
+#2 /home/tribew/public_html/api/auth/bootstrap.php(6): require_once('/home/tribew/pu...')
+#3 /home/tribew/public_html/api/auth/public/index.php(3): require_once('/home/tribew/pu...')
+#4 {main}
+  thrown in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php on line 22
+[24-Nov-2025 14:48:03 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php(25): require()
+#1 /home/tribew/public_html/api/auth/vendor/autoload.php(22): ComposerAutoloaderInitd3c84adce2092413a750d9fc41144dd8::getLoader()
+#2 /home/tribew/public_html/api/auth/bootstrap.php(6): require_once('/home/tribew/pu...')
+#3 /home/tribew/public_html/api/auth/public/index.php(3): require_once('/home/tribew/pu...')
+#4 {main}
+  thrown in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php on line 22
+[24-Nov-2025 14:49:39 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php(25): require()
+#1 /home/tribew/public_html/api/auth/vendor/autoload.php(22): ComposerAutoloaderInitd3c84adce2092413a750d9fc41144dd8::getLoader()
+#2 /home/tribew/public_html/api/auth/bootstrap.php(6): require_once('/home/tribew/pu...')
+#3 /home/tribew/public_html/api/auth/public/index.php(3): require_once('/home/tribew/pu...')
+#4 {main}
+  thrown in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php on line 22
+[24-Nov-2025 14:51:56 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php(25): require()
+#1 /home/tribew/public_html/api/auth/vendor/autoload.php(22): ComposerAutoloaderInitd3c84adce2092413a750d9fc41144dd8::getLoader()
+#2 /home/tribew/public_html/api/auth/bootstrap.php(6): require_once('/home/tribew/pu...')
+#3 /home/tribew/public_html/api/auth/public/index.php(3): require_once('/home/tribew/pu...')
+#4 {main}
+  thrown in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php on line 22
+[24-Nov-2025 14:54:12 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php(25): require()
+#1 /home/tribew/public_html/api/auth/vendor/autoload.php(22): ComposerAutoloaderInitd3c84adce2092413a750d9fc41144dd8::getLoader()
+#2 /home/tribew/public_html/api/auth/bootstrap.php(6): require_once('/home/tribew/pu...')
+#3 /home/tribew/public_html/api/auth/public/index.php(3): require_once('/home/tribew/pu...')
+#4 {main}
+  thrown in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php on line 22
+[24-Nov-2025 14:54:19 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php(25): require()
+#1 /home/tribew/public_html/api/auth/vendor/autoload.php(22): ComposerAutoloaderInitd3c84adce2092413a750d9fc41144dd8::getLoader()
+#2 /home/tribew/public_html/api/auth/bootstrap.php(6): require_once('/home/tribew/pu...')
+#3 /home/tribew/public_html/api/auth/public/index.php(3): require_once('/home/tribew/pu...')
+#4 {main}
+  thrown in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php on line 22
+[24-Nov-2025 14:54:35 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/tribew/public_html/api/auth/vendor/composer/autoload_real.php(25): require()
+#1 /home/tribew/public_html/api/auth/vendor/autoload.php(22): ComposerAutoloaderInitd3c84adce2092413a750d9fc41144dd8::getLoader()
+#2 /home/tribew/public_html/api/auth/bootstrap.php(6): require_once('/home/tribew/pu...')
+#3 /home/tribew/public_html/api/auth/public/index.php(3): require_once('/home/tribew/pu...')
+#4 {main}
+  thrown in /home/tribew/public_html/api/auth/vendor/composer/platform_check.php on line 22

@@ -1,0 +1,21 @@
+{
+    "name": "trekly/ratings-service",
+    "description": "Ratings Service for TREKLY",
+    "type": "project",
+    "require": {
+        "php": "^8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Trekly\\Ratings\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Trekly Team",
+            "email": "dev@trekly.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
