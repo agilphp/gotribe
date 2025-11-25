@@ -32,6 +32,25 @@
                     <mat-icon matListItemIcon>login</mat-icon>
                     <span matListItemTitle>{{ 'nav.login' | translate }}</span>
                 </a>
+            </ng-template>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <mat-toolbar color="primary" class="app-toolbar">
+            <button mat-icon-button (click)="sidenav.toggle()" class="menu-button">
+                <mat-icon>menu</mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="toggleSearch()" class="mobile-search-btn">
+                <mat-icon>search</mat-icon>
+            </button>
+
+            <img src="logo.png" alt="GoTribe Logo" class="app-logo" routerLink="/">
+            <span class="logo" routerLink="/">GoTribe</span>
+            <span class="spacer"></span>
+
+            <div class="desktop-nav">
                 <button mat-button routerLink="/projects">{{ 'nav.adventures' | translate }}</button>
 
                 <!-- Language Selector -->
@@ -74,11 +93,11 @@
                         {{ 'nav.login' | translate }}
                     </button>
                 </ng-template>
-                </div>
-                </mat-toolbar>
+            </div>
+        </mat-toolbar>
 
-                <div class="main-content">
-                    <router-outlet></router-outlet>
-                </div>
-                </mat-sidenav-content>
+        <div class="main-content">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
 </mat-sidenav-container>

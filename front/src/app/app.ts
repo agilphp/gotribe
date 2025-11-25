@@ -34,7 +34,7 @@ import { PaymentsComponent } from './payments/payments.component';
     , PaymentsComponent
   ],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrls: ['./app.scss']
 })
 export class App {
   protected readonly title = signal('TREKLY');
