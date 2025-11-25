@@ -7,6 +7,9 @@ use Trekly\Project\Application\CreateProjectUseCase;
 use Trekly\Project\Application\PublishProjectUseCase;
 use Trekly\Project\Application\ListProjectsUseCase;
 use Trekly\Project\Interface\Http\ProjectController;
+use Trekly\Project\Infrastructure\Services\CreatorQRService;
+use Trekly\Project\Infrastructure\Email\ProjectEmailService;
+use Trekly\Project\Infrastructure\Http\AuthServiceClient;
 
 header('Content-Type: application/json');
 $allowedOrigin = $_ENV['CORS_ALLOWED_ORIGIN'] ?? '*';
@@ -33,10 +36,15 @@ try {
     
     // Setup Repository with Doctrine
     $projectRepository = new DoctrineProjectRepository($entityManager);
+    
+    // Setup Services
+    $qrService = new CreatorQRService();
+    $emailService = new ProjectEmailService();
+    $authClient = new AuthServiceClient();
 
     // Setup Use Cases
     $createProjectUseCase = new CreateProjectUseCase($projectRepository);
-    $publishProjectUseCase = new PublishProjectUseCase($projectRepository);
+    $publishProjectUseCase = new PublishProjectUseCase($projectRepository, $qrService, $emailService, $authClient);
     $listProjectsUseCase = new ListProjectsUseCase($projectRepository);
 
     // Setup Controller
@@ -53,7 +61,7 @@ try {
     $method = $_SERVER['REQUEST_METHOD'];
 
     // DEBUG: Log request details
-    error_log("DEBUG - URI: $uri, Method: $method, Raw Body: " . file_get_contents('php://input'));
+    error_log("DEBUG - URI: $uri, Method: $method");
 
     // Routes: /api/projects and /api/projects/{id}/publish
     if ($uri === '/api/projects') {

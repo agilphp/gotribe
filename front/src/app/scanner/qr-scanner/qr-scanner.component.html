@@ -6,8 +6,38 @@
         </mat-card-header>
 
         <mat-card-content>
+            <!-- Instructions -->
+            <div class="instructions" *ngIf="!isScanning && !validationResult && !error">
+                <h3>📱 How to Use</h3>
+                <div class="instruction-list">
+                    <p><strong>Option A - Creator scans Member:</strong></p>
+                    <ol>
+                        <li>Member shows their QR code (from email)</li>
+                        <li>Creator clicks "Start Scan"</li>
+                        <li>Point camera at member's QR</li>
+                        <li>System validates payment automatically</li>
+                    </ol>
+                    <p><strong>Option B - Member scans Creator:</strong></p>
+                    <ol>
+                        <li>Creator shows their QR code</li>
+                        <li>Member clicks "Start Scan"</li>
+                        <li>Point camera at creator's QR</li>
+                        <li>System validates payment automatically</li>
+                    </ol>
+                </div>
+            </div>
+
             <!-- QR Reader Container -->
             <div id="qr-reader" [class.hidden]="!isScanning"></div>
+
+            <!-- QR Type Indicator -->
+            <div class="qr-type-indicator" *ngIf="qrType">
+                <mat-chip-set>
+                    <mat-chip [color]="qrType === 'member' ? 'primary' : 'accent'" selected>
+                        {{ getQRTypeLabel() }}
+                    </mat-chip>
+                </mat-chip-set>
+            </div>
 
             <!-- Controls -->
             <div class="controls" *ngIf="!validationResult && !isValidating">
@@ -27,6 +57,7 @@
             <div class="validation-loading" *ngIf="isValidating">
                 <mat-spinner diameter="50"></mat-spinner>
                 <p>{{ 'scanner.validating' | translate }}</p>
+                <p class="sub-text">Processing payment validation...</p>
             </div>
 
             <!-- Error Message -->
@@ -41,10 +72,14 @@
             <!-- Success Result -->
             <div class="success-result" *ngIf="validationResult && validationResult.valid">
                 <mat-icon color="primary" class="success-icon">check_circle</mat-icon>
-                <h2>{{ 'scanner.validTicket' | translate }}</h2>
+                <h2>✅ {{ 'scanner.validTicket' | translate }}</h2>
                 <p class="message">{{ validationResult.message }}</p>
                 <div class="details">
                     <p><strong>{{ 'scanner.timestamp' | translate }}:</strong> {{ validationResult.timestamp }}</p>
+                    <p class="payment-info">
+                        <mat-icon>info</mat-icon>
+                        <span>10% commission automatically calculated and registered</span>
+                    </p>
                 </div>
                 <button mat-raised-button color="primary" (click)="reset(); startScanning()">
                     {{ 'scanner.scanNext' | translate }}
@@ -54,7 +89,7 @@
             <!-- Invalid Result -->
             <div class="error-result" *ngIf="validationResult && !validationResult.valid">
                 <mat-icon color="warn" class="error-icon">cancel</mat-icon>
-                <h2>{{ 'scanner.invalidTicket' | translate }}</h2>
+                <h2>❌ {{ 'scanner.invalidTicket' | translate }}</h2>
                 <p class="message">{{ validationResult.error }}</p>
                 <button mat-raised-button color="warn" (click)="reset(); startScanning()">
                     {{ 'scanner.scanNext' | translate }}

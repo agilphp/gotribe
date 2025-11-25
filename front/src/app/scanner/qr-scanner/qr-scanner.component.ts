@@ -4,9 +4,18 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatChipsModule } from '@angular/material/chips';
 import { Html5Qrcode } from 'html5-qrcode';
 import { ParticipationService, ValidationResult } from '../../shared/services/participation.service';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+
+interface QRData {
+    participationId?: string;
+    projectId?: string;
+    creatorId?: string;
+    userId?: string;
+    action: string;
+}
 
 @Component({
     selector: 'app-qr-scanner',
@@ -17,6 +26,7 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
         MatButtonModule,
         MatIconModule,
         MatProgressSpinnerModule,
+        MatChipsModule,
         TranslatePipe
     ],
     templateUrl: './qr-scanner.component.html',
@@ -28,6 +38,7 @@ export class QrScannerComponent implements OnInit, OnDestroy {
     validationResult: ValidationResult | null = null;
     error: string | null = null;
     isValidating = false;
+    qrType: 'member' | 'creator' | null = null;
 
     constructor(private participationService: ParticipationService) { }
 
@@ -43,6 +54,7 @@ export class QrScannerComponent implements OnInit, OnDestroy {
         try {
             this.error = null;
             this.validationResult = null;
+            this.qrType = null;
             this.isScanning = true;
 
             await this.html5QrCode!.start(
@@ -79,11 +91,23 @@ export class QrScannerComponent implements OnInit, OnDestroy {
         this.stopScanning();
 
         try {
-            const qrData = JSON.parse(decodedText);
+            const qrData: QRData = JSON.parse(decodedText);
 
+            // Option A: Creator scans member's QR
             if (qrData.participationId && qrData.action === 'validate_attendance') {
-                this.validateTicket(qrData.participationId);
-            } else {
+                this.qrType = 'member';
+                this.validateMemberTicket(qrData.participationId);
+            }
+            // Option B: Member scans creator's QR
+            else if (qrData.projectId && qrData.creatorId && qrData.action === 'validate_member_payment') {
+                this.qrType = 'creator';
+                this.error = 'Creator QR detected. This feature requires member authentication. Please use the app to scan.';
+                // In a full implementation, this would:
+                // 1. Get current user's participation for this project
+                // 2. Validate that participation
+                // For now, show message to use proper flow
+            }
+            else {
                 this.error = 'Invalid QR code format';
             }
         } catch (err) {
@@ -91,7 +115,7 @@ export class QrScannerComponent implements OnInit, OnDestroy {
         }
     }
 
-    validateTicket(participationId: string): void {
+    validateMemberTicket(participationId: string): void {
         this.isValidating = true;
         this.error = null;
 
@@ -110,5 +134,15 @@ export class QrScannerComponent implements OnInit, OnDestroy {
     reset(): void {
         this.validationResult = null;
         this.error = null;
+        this.qrType = null;
+    }
+
+    getQRTypeLabel(): string {
+        if (this.qrType === 'member') {
+            return 'Member Ticket';
+        } else if (this.qrType === 'creator') {
+            return 'Creator QR';
+        }
+        return '';
     }
 }
