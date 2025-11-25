@@ -16,10 +16,10 @@ $config = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
 
 $connectionParams = [
     'driver' => 'pdo_mysql',
-    'host' => $_ENV['DB_HOST'] ?? 'localhost',
-    'dbname' => $_ENV['DB_NAME'] ?? 'tribew_participations',
-    'user' => $_ENV['DB_USER'] ?? 'tribew_eli4as',
-    'password' => $_ENV['DB_PASS'] ?? '8TK4Nqp8d9SX4uxa',
+    'host' => 'localhost',
+    'dbname' => 'tribew_participations',
+    'user' => 'tribew_eli4as',
+    'password' => '8TK4Nqp8d9SX4uxa',
     'charset' => 'utf8mb4',
 ];
 
