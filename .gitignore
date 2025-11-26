@@ -71,3 +71,4 @@ api/*/bootstrap.php
 api/projects/src/Infrastructure/Email/ProjectEmailService.php
 api/participation/src/Infrastructure/Email/EmailService.php
 api/auth/src/Infrastructure/Email/EmailService.php
+*.md

@@ -7,6 +7,8 @@ import { QrScannerComponent } from './scanner/qr-scanner/qr-scanner.component';
 import { authGuard } from './auth/auth.guard';
 
 import { PaymentsComponent } from './payments/payments.component';
+import { PaymentSuccessComponent } from './payments/payment-success/payment-success.component';
+import { PaymentFailureComponent } from './payments/payment-failure/payment-failure.component';
 
 export const routes: Routes = [
     { path: 'auth/login', component: LoginComponent },
@@ -15,5 +17,8 @@ export const routes: Routes = [
     { path: 'projects/create', component: ProjectCreateComponent, canActivate: [authGuard] },
     { path: 'scanner', component: QrScannerComponent, canActivate: [authGuard] },
     { path: 'payments', component: PaymentsComponent, canActivate: [authGuard] },
+    { path: 'payment/success', component: PaymentSuccessComponent },
+    { path: 'payment/failure', component: PaymentFailureComponent },
+    { path: 'payment/pending', component: PaymentSuccessComponent },
     { path: '', redirectTo: 'projects', pathMatch: 'full' }
 ];

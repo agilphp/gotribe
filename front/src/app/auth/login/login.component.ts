@@ -7,7 +7,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'app-login',
@@ -20,13 +22,15 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
         MatInputModule,
         MatButtonModule,
         MatSnackBarModule,
-        TranslatePipe
+        TranslatePipe,
+        MatIconModule
     ],
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
     loginForm: FormGroup;
+    private apiUrl = `${environment.apiUrl}/auth`;
 
     constructor(
         private fb: FormBuilder,
@@ -54,5 +58,42 @@ export class LoginComponent {
                 }
             });
         }
+    }
+
+    loginWithGoogle() {
+        const width = 500;
+        const height = 600;
+        const left = (screen.width - width) / 2;
+        const top = (screen.height - height) / 2;
+        const authWindow = window.open(
+            `${this.apiUrl}/google`,
+            'GoogleLogin',
+            `width=${width},height=${height},top=${top},left=${left}`
+        );
+
+        const poll = setInterval(() => {
+            try {
+                if (authWindow && authWindow.closed) {
+                    clearInterval(poll);
+                    return;
+                }
+                if (authWindow && authWindow.location.href.includes('/auth/google/callback')) {
+                    // Try to read the response from the popup
+                    const urlParams = new URLSearchParams(authWindow.location.search);
+                    const token = urlParams.get('token');
+                    const userJson = urlParams.get('user');
+
+                    if (token && userJson) {
+                        const user = JSON.parse(userJson);
+                        this.authService.loginWithGoogleToken(token, user);
+                        authWindow.close();
+                        clearInterval(poll);
+                        this.router.navigate(['/projects']);
+                    }
+                }
+            } catch (e) {
+                // Cross-origin errors are expected until redirect lands on our domain
+            }
+        }, 500);
     }
 }

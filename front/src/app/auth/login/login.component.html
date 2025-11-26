@@ -28,6 +28,12 @@
                     class="full-width">
                     {{ 'auth.login' | translate }}
                 </button>
+
+                <button mat-stroked-button color="primary" type="button" (click)="loginWithGoogle()" class="full-width"
+                    style="margin-top:8px;">
+                    <mat-icon>login</mat-icon>
+                    Sign in with Google
+                </button>
             </form>
         </mat-card-content>
         <mat-card-actions align="end">

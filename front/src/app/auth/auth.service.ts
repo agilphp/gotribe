@@ -46,4 +46,15 @@ export class AuthService {
     this.currentUserSubject.next(null);
     this.router.navigate(['/auth/login']);
   }
+
+  loginWithGoogleToken(token: string, user: any) {
+    const userData = {
+      token,
+      email: user.email,
+      role: user.role,
+      userId: user.id
+    };
+    localStorage.setItem('currentUser', JSON.stringify(userData));
+    this.currentUserSubject.next(userData);
+  }
 }
