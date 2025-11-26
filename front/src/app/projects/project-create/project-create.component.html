@@ -71,18 +71,9 @@
                     </mat-select>
                 </mat-form-field>
 
-                <button mat-raised-button color="primary" type="submit"
-                    [disabled]="!projectForm.valid || showPaymentButton">{{
+                <button mat-raised-button color="primary" type="submit" [disabled]="!projectForm.valid">{{
                     'project.create' | translate }}</button>
             </form>
-
-            <!-- Payment Section -->
-            <div *ngIf="showPaymentButton && createdProject" class="payment-section">
-                <mat-divider style="margin: 24px 0;"></mat-divider>
-                <app-payment-button [projectId]="createdProject.id" [projectBudget]="createdProject.price"
-                    [userId]="currentUserId" [currency]="createdProject.currency">
-                </app-payment-button>
-            </div>
         </mat-card-content>
     </mat-card>
 </div>

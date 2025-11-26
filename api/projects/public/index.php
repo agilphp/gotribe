@@ -43,7 +43,7 @@ try {
     $authClient = new AuthServiceClient();
 
     // Setup Use Cases
-    $createProjectUseCase = new CreateProjectUseCase($projectRepository);
+    $createProjectUseCase = new CreateProjectUseCase($projectRepository, $qrService, $emailService, $authClient);
     $publishProjectUseCase = new PublishProjectUseCase($projectRepository, $qrService, $emailService, $authClient);
     $listProjectsUseCase = new ListProjectsUseCase($projectRepository);
 

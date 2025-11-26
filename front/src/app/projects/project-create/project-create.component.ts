@@ -16,7 +16,7 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { CurrencyService } from '../../shared/services/currency.service';
 import { Currency } from '../../shared/models/currency.model';
 import { OnInit } from '@angular/core';
-import { PaymentButtonComponent } from '../../payments/payment-button/payment-button.component';
+
 
 @Component({
     selector: 'app-project-create',
@@ -33,8 +33,7 @@ import { PaymentButtonComponent } from '../../payments/payment-button/payment-bu
         MatDatepickerModule,
         MatIconModule,
         MatDividerModule,
-        TranslatePipe,
-        PaymentButtonComponent
+        TranslatePipe
     ],
     templateUrl: './project-create.component.html',
     styleUrls: ['./project-create.component.scss']
@@ -44,8 +43,7 @@ export class ProjectCreateComponent implements OnInit {
     imagePreview: string | null = null;
     selectedImage: string | null = null;
     currencies: Currency[] = [];
-    showPaymentButton = false;
-    createdProject: any = null;
+
 
     constructor(
         private fb: FormBuilder,
@@ -120,19 +118,14 @@ export class ProjectCreateComponent implements OnInit {
             };
 
             this.projectService.createProject(payload).subscribe({
-                next: (project) => {
-                    this.createdProject = project;
-                    this.showPaymentButton = true;
-                    this.snackBar.open('Project created! Please complete payment to publish.', 'Close', { duration: 5000 });
+                next: () => {
+                    this.snackBar.open('Project created successfully!', 'Close', { duration: 3000 });
+                    this.router.navigate(['/projects']);
                 },
                 error: (error: any) => {
                     this.snackBar.open('Failed to create project', 'Close', { duration: 3000 });
                 }
             });
         }
-    }
-
-    get currentUserId(): string {
-        return this.authService.currentUserValue?.userId || '';
     }
 }
