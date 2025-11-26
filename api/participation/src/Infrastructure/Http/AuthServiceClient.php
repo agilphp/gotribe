@@ -6,9 +6,9 @@ class AuthServiceClient
 {
     private string $baseUrl;
 
-    public function __construct(string $baseUrl = 'http://auth-service:80')
+    public function __construct(?string $baseUrl = null)
     {
-        $this->baseUrl = $baseUrl;
+        $this->baseUrl = $baseUrl ?? $_ENV['AUTH_API_URL'] ?? 'https://gotribe.co';
     }
 
     public function getUser(string $userId): ?array
