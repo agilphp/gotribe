@@ -8,7 +8,7 @@ use Gotribe\Payments\Interface\Http\CuentaPorPagarConsultaController;
 use Gotribe\Payments\Interface\Http\PagoController;
 use Gotribe\Payments\Infrastructure\Persistence\PDOCuentaPorPagarRepository;
 use Trekly\Payments\Infrastructure\Payment\MercadoPagoService;
-use Trekly\Payments\Infrastructure\Persistence\DoctrinePaymentRepository;
+use Trekly\Payments\Infrastructure\Persistence\PDOPaymentRepository;
 use Trekly\Payments\Infrastructure\Http\ProjectServiceClient;
 use Trekly\Payments\Application\CreatePaymentPreferenceUseCase;
 use Trekly\Payments\Application\ProcessWebhookUseCase;
@@ -49,7 +49,7 @@ try {
     
     // Initialize Mercado Pago services
     $mercadoPagoService = new MercadoPagoService();
-    $paymentRepository = new DoctrinePaymentRepository($entityManager);
+    $paymentRepository = new PDOPaymentRepository($pdo);
     $projectServiceClient = new ProjectServiceClient();
     
     $createPreferenceUseCase = new CreatePaymentPreferenceUseCase(
