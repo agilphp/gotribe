@@ -6,9 +6,9 @@ class UserServiceClient
 {
     private string $baseUrl;
 
-    public function __construct(string $baseUrl = 'http://user-service:80')
+    public function __construct(?string $baseUrl = null)
     {
-        $this->baseUrl = $baseUrl;
+        $this->baseUrl = $baseUrl ?? ($_ENV['USER_SERVICE_URL'] ?? $_SERVER['USER_SERVICE_URL'] ?? getenv('USER_SERVICE_URL') ?: 'http://localhost/gotribe');
     }
 
     public function getUser(string $userId): ?array

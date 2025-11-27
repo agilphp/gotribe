@@ -8,7 +8,7 @@ class AuthServiceClient
 
     public function __construct()
     {
-        $this->baseUrl = $_ENV['AUTH_SERVICE_URL'] ?? 'https://gotribe.co/api/auth';
+        $this->baseUrl = $_ENV['AUTH_SERVICE_URL'] ?? $_SERVER['AUTH_SERVICE_URL'] ?? getenv('AUTH_SERVICE_URL') ?: 'http://localhost/gotribe';
     }
 
     public function getUser(string $userId): ?array

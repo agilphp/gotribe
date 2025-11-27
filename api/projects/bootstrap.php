@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;

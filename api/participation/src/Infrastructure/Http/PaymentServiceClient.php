@@ -8,8 +8,8 @@ class PaymentServiceClient
 
     public function __construct()
     {
-        // Use environment variable or default to same domain
-        $this->baseUrl = $_ENV['PAYMENT_SERVICE_URL'] ?? 'https://gotribe.co/api/payments';
+        // Use environment variable or default to localhost
+        $this->baseUrl = $_ENV['PAYMENT_SERVICE_URL'] ?? $_SERVER['PAYMENT_SERVICE_URL'] ?? getenv('PAYMENT_SERVICE_URL') ?: 'http://localhost/gotribe';
     }
 
     /**

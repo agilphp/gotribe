@@ -6,9 +6,9 @@ class ProjectServiceClient
 {
     private string $baseUrl;
 
-    public function __construct(string $baseUrl = 'http://localhost/gotribe')
+    public function __construct(?string $baseUrl = null)
     {
-        $this->baseUrl = $baseUrl;
+        $this->baseUrl = $baseUrl ?? ($_ENV['PROJECTS_SERVICE_URL'] ?? $_SERVER['PROJECTS_SERVICE_URL'] ?? getenv('PROJECTS_SERVICE_URL') ?: 'http://localhost/gotribe');
     }
 
     public function getProject(string $projectId): ?array

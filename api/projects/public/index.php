@@ -73,7 +73,7 @@ try {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed', 'received_method' => $method, 'uri' => $uri]);
         }
-    } elseif (preg_match('#^/api/projects/([^/]+)/publish$#', $uri, $matches)) {
+    } elseif (preg_match('#/api/projects/([^/]+)/publish$#', $uri, $matches)) {
         $id = $matches[1];
         if ($method === 'POST') {
             $controller->publish($id);
@@ -101,7 +101,7 @@ try {
             http_response_code(500);
             echo json_encode(['error' => 'Failed to fetch currencies: ' . $e->getMessage()]);
         }
-    } elseif (preg_match('#^/api/projects/([^/]+)$#', $uri, $matches)) {
+    } elseif (preg_match('#/api/projects/([^/]+)$#', $uri, $matches)) {
         $id = $matches[1];
         if ($method === 'GET') {
             $controller->getById($id);
