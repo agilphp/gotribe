@@ -13,20 +13,13 @@ ini_set('log_errors', 1);
 // Set JSON header
 header('Content-Type: application/json');
 
-// --- FIX AUTHORIZATION HEADER FOR FASTCGI/CPANEL ---
+// Authorization header is handled by root .htaccess and bootstrap.php
+// However, for safety in case of direct access or different server config:
 if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
     if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
         $_SERVER['HTTP_AUTHORIZATION'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
-    } elseif (isset($_ENV['HTTP_AUTHORIZATION'])) {
-        $_SERVER['HTTP_AUTHORIZATION'] = $_ENV['HTTP_AUTHORIZATION'];
-    } elseif (function_exists('apache_request_headers')) {
-        $requestHeaders = apache_request_headers();
-        if (isset($requestHeaders['Authorization'])) {
-            $_SERVER['HTTP_AUTHORIZATION'] = $requestHeaders['Authorization'];
-        }
     }
 }
-// ---------------------------------------------------
 
 // Get the request URI and method
 $requestUri = $_SERVER['REQUEST_URI'];
@@ -38,8 +31,9 @@ $uri = parse_url($requestUri, PHP_URL_PATH);
 // Log the request for debugging
 error_log("API Router - URI: $uri, Method: $requestMethod");
 
-// Extract service from URI: /api/{service}/...
-if (preg_match('#^/api/([^/]+)(/.*)?$#', $uri, $matches)) {
+// Extract service from URI: .../api/{service}/...
+// Matches /api/service or /subfolder/api/service
+if (preg_match('#/api/([^/]+)(/.*)?$#', $uri, $matches)) {
     $service = $matches[1];
     $servicePath = $matches[2] ?? '/';
     
@@ -49,7 +43,7 @@ if (preg_match('#^/api/([^/]+)(/.*)?$#', $uri, $matches)) {
         'users' => __DIR__ . '/user/public/index.php',
         'projects' => __DIR__ . '/projects/public/index.php',
         'participations' => __DIR__ . '/participation/public/index.php',
-        'ratings' => __DIR__ . '/user/public/index.php',
+        'ratings' => __DIR__ . '/user/public/index.php',  // Ratings functionality is implemented in User service
         'payments' => __DIR__ . '/payments/public/index.php',
     ];
     

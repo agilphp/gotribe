@@ -72,16 +72,18 @@
                 <div class="card-actions" (click)="$event.stopPropagation()">
                     <ng-container *ngIf="currentUser$ | async as user">
                         <button
-                            *ngIf="user.role === 'MEMBER' && !joinedProjectIds.has(project.id) && user.userId !== project.creatorId"
+                            *ngIf="user.role === 'MEMBER' && !participationsByProject[project.id] && user.userId !== project.creatorId"
                             mat-raised-button color="accent" (click)="joinProject(project.id)" class="join-btn">
                             {{ 'project.join' | translate }}
                         </button>
-                        <span *ngIf="user.role === 'MEMBER' && joinedProjectIds.has(project.id)" class="joined-badge">
+                        <span *ngIf="user.role === 'MEMBER' && participationsByProject[project.id]" class="joined-badge">
                             <mat-icon>check_circle</mat-icon>
                             {{ 'project.joined' | translate }}
                         </span>
                         <button
-                            *ngIf="user.role === 'MEMBER' && !ratedProjectIds.has(project.creatorId) && joinedProjectIds.has(project.id)"
+                            *ngIf="user.role === 'MEMBER' && !ratedProjectIds.has(project.id) && participationsByProject[project.id] &&
+                            ((project.price === 0 && ['REQUESTED','CONFIRMED','ATTENDED'].includes(participationsByProject[project.id].status)) ||
+                            (project.price > 0 && participationsByProject[project.id].status === 'ATTENDED'))"
                             mat-button color="primary" (click)="openRateDialog(project.id, project.creatorId)"
                             class="rate-btn">
                             <mat-icon>star</mat-icon>

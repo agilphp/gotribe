@@ -1,1 +1,0 @@
-Este servicio ha sido eliminado. Toda la funcionalidad de ratings está en el servicio user.

@@ -1,0 +1,14 @@
+{
+    "name": "gotribe/root",
+    "description": "Root configuration for GoTribe",
+    "type": "project",
+    "require": {
+        "php": "^8.2",
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}

@@ -4,7 +4,7 @@ namespace Trekly\Project\Infrastructure\Services;
 
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
 use Dompdf\Dompdf;
@@ -23,16 +23,15 @@ class CreatorQRService
             'action' => 'validate_member_payment'
         ]);
 
-        $result = (new Builder(
-            writer: new PngWriter(),
-            writerOptions: [],
-            data: $qrContent,
-            encoding: new Encoding('UTF-8'),
-            errorCorrectionLevel: ErrorCorrectionLevel::High,
-            size: 400,
-            margin: 20,
-            roundBlockSizeMode: RoundBlockSizeMode::Margin
-        ))->build();
+        $result = Builder::create()
+            ->writer(new PngWriter())
+            ->data($qrContent)
+            ->encoding(new Encoding('UTF-8'))
+            ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+            ->size(400)
+            ->margin(20)
+            ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
+            ->build();
 
         return $result->getDataUri();
     }

@@ -6,8 +6,8 @@ node_modules/
 /build/
 
 # Environment files
-.env
-.env.*
+#.env
+#.env.*
 
 # IDE/editor config
 .vscode/
@@ -31,11 +31,11 @@ Thumbs.db
 coverage/
 
 # Dependency directories
-vendor/
+#vendor/
 
 # PHP specific
 *.lock
-composer.lock
+#composer.lock
 
 # Misc
 npm-debug.log*
@@ -67,9 +67,9 @@ src/assets/i18n/*.json
 /old/
 
 # Files with hardcoded credentials (Database & SMTP)
-api/*/bootstrap.php
-api/projects/src/Infrastructure/Email/ProjectEmailService.php
-api/participation/src/Infrastructure/Email/EmailService.php
-api/auth/src/Infrastructure/Email/EmailService.php
+#api/*/bootstrap.php
+#api/projects/src/Infrastructure/Email/ProjectEmailService.php
+#api/participation/src/Infrastructure/Email/EmailService.php
+#api/auth/src/Infrastructure/Email/EmailService.php
 *.md
 MERCADOPAGO_ENV_VARS.txt

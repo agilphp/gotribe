@@ -1,0 +1,23 @@
+# Root .htaccess for GoTribe
+
+# Force PHP 8.2+
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php82 .php .php8 .phtml
+</IfModule>
+
+RewriteEngine On
+RewriteBase /gotribe/
+
+# Handle Authorization Header
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# CORS Preflight (Optional, handled in PHP usually better for logic, but basic here)
+# Header always set Access-Control-Allow-Origin "*"
+# Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT"
+# Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+
+# Route everything to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]

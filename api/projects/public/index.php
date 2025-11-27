@@ -1,21 +1,14 @@
 <?php
 
-require_once __DIR__ . '/../bootstrap.php';
 
 use Trekly\Project\Infrastructure\Persistence\DoctrineProjectRepository;
 use Trekly\Project\Application\CreateProjectUseCase;
 use Trekly\Project\Application\PublishProjectUseCase;
 use Trekly\Project\Application\ListProjectsUseCase;
 use Trekly\Project\Interface\Http\ProjectController;
-use Trekly\Project\Infrastructure\Services\CreatorQRService;
-use Trekly\Project\Infrastructure\Email\ProjectEmailService;
-use Trekly\Project\Infrastructure\Http\AuthServiceClient;
+use Trekly\Project\Infrastructure\Security\JwtTokenProvider;
 
-header('Content-Type: application/json');
-$allowedOrigin = $_ENV['CORS_ALLOWED_ORIGIN'] ?? '*';
-header("Access-Control-Allow-Origin: $allowedOrigin");
-header('Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+// CORS headers are handled by root bootstrap.php
 
 // Handle preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -36,24 +29,28 @@ try {
     
     // Setup Repository with Doctrine
     $projectRepository = new DoctrineProjectRepository($entityManager);
-    
-    // Setup Services
-    $qrService = new CreatorQRService();
-    $emailService = new ProjectEmailService();
-    $authClient = new AuthServiceClient();
 
     // Setup Use Cases
-    $createProjectUseCase = new CreateProjectUseCase($projectRepository, $qrService, $emailService, $authClient);
-    $publishProjectUseCase = new PublishProjectUseCase($projectRepository, $qrService, $emailService, $authClient);
+    $createProjectUseCase = new CreateProjectUseCase($projectRepository);
+    $publishProjectUseCase = new PublishProjectUseCase(
+        $projectRepository,
+        new \Trekly\Project\Infrastructure\Services\CreatorQRService(),
+        new \Trekly\Project\Infrastructure\Email\ProjectEmailService(),
+        new \Trekly\Project\Infrastructure\Http\AuthServiceClient()
+    );
     $listProjectsUseCase = new ListProjectsUseCase($projectRepository);
 
+        // Setup JWT Token Provider
+        $jwtTokenProvider = new JwtTokenProvider($_ENV['JWT_SECRET'] ?? 'gotribe_jwt_secret_change_this_in_production_32chars_minimum');
+
     // Setup Controller
-    $controller = new ProjectController(
-        $createProjectUseCase,
-        $publishProjectUseCase,
-        $listProjectsUseCase,
-        $projectRepository
-    );
+        $controller = new ProjectController(
+            $createProjectUseCase,
+            $publishProjectUseCase,
+            $listProjectsUseCase,
+            $projectRepository,
+            $jwtTokenProvider
+        );
 
     // Router
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -61,10 +58,11 @@ try {
     $method = $_SERVER['REQUEST_METHOD'];
 
     // DEBUG: Log request details
-    error_log("DEBUG - URI: $uri, Method: $method");
+    error_log("DEBUG - URI: $uri, Method: $method, Raw Body: " . file_get_contents('php://input'));
 
     // Routes: /api/projects and /api/projects/{id}/publish
-    if ($uri === '/api/projects') {
+    // Support subdirectories (e.g., /gotribe/api/projects)
+    if (preg_match('#/api/projects$#', $uri)) {
         if ($method === 'POST') {
             error_log("DEBUG - Calling create() method");
             $controller->create();
@@ -83,16 +81,16 @@ try {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed']);
         }
-    } elseif ($uri === '/api/projects/currencies' && $method === 'GET') {
+    } elseif (preg_match('#/api/projects/currencies$#', $uri) && $method === 'GET') {
         // Get currencies endpoint
         try {
             $pdo = new PDO(
                 sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4',
-                    $_ENV['DB_HOST'] ?? 'localhost',
-                    $_ENV['DB_NAME'] ?? 'tribew_projects'
+                    $_ENV['DB_HOST'] ?? $_SERVER['DB_HOST'] ?? getenv('DB_HOST') ?: 'localhost',
+                    $_ENV['PROJECTS_DB_DATABASE'] ?? $_SERVER['PROJECTS_DB_DATABASE'] ?? getenv('PROJECTS_DB_DATABASE') ?: 'tribew_projects'
                 ),
-                $_ENV['DB_USER'] ?? 'tribew_eli4as',
-                $_ENV['DB_PASS'] ?? '8TK4Nqp8d9SX4uxa',
+                $_ENV['DB_USERNAME'] ?? $_SERVER['DB_USERNAME'] ?? getenv('DB_USERNAME') ?: 'root',
+                $_ENV['DB_PASSWORD'] ?? $_SERVER['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?: '',
                 [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
             );
 

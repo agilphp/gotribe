@@ -52,7 +52,7 @@ export class RateDialogComponent {
   ) { }
 
   submitRating() {
-    this.ratingService.rateCreator(this.data.projectId, this.data.creatorId, this.rating, this.comment).subscribe({
+      this.ratingService.rateCreator(this.data.creatorId, this.data.projectId, this.rating, this.comment).subscribe({
       next: () => {
         this.snackBar.open('Rating submitted successfully!', 'Close', { duration: 3000 });
         this.dialogRef.close(true);

@@ -18,14 +18,14 @@ class CreateProjectUseCase
 
     public function __construct(
         ProjectRepository $repository,
-        CreatorQRService $qrService,
-        ProjectEmailService $emailService,
-        AuthServiceClient $authClient
+        ?CreatorQRService $qrService = null,
+        ?ProjectEmailService $emailService = null,
+        ?AuthServiceClient $authClient = null
     ) {
         $this->repository = $repository;
-        $this->qrService = $qrService;
-        $this->emailService = $emailService;
-        $this->authClient = $authClient;
+        $this->qrService = $qrService ?? new CreatorQRService();
+        $this->emailService = $emailService ?? new ProjectEmailService();
+        $this->authClient = $authClient ?? new AuthServiceClient();
     }
 
     public function execute(
@@ -59,6 +59,12 @@ class CreateProjectUseCase
 
         // Generate Creator QR Code (non-blocking)
         try {
+            // Check if QR library exists before trying to use it
+            if (!class_exists('Endroid\QrCode\Builder\Builder')) {
+                error_log("WARNING: QR Library not found. Skipping Creator QR generation.");
+                return $project;
+            }
+
             // Only generate QR if project has a price > 0
             if ($project->getPrice() > 0) {
                 // Get creator details
@@ -99,7 +105,7 @@ class CreateProjectUseCase
                     error_log("Creator QR sent successfully for project: {$project->getId()}");
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // Log error but don't fail the creation
             error_log("Failed to send creator QR: " . $e->getMessage());
         }

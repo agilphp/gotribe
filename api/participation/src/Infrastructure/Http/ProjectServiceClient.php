@@ -6,7 +6,7 @@ class ProjectServiceClient
 {
     private string $baseUrl;
 
-    public function __construct(string $baseUrl = 'https://gotribe.co')
+    public function __construct(string $baseUrl = 'http://localhost/gotribe')
     {
         $this->baseUrl = $baseUrl;
     }

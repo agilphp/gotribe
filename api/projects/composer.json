@@ -9,7 +9,10 @@
         "doctrine/dbal": "^3.7",
         "doctrine/migrations": "^3.7",
         "symfony/cache": "^6.4",
-        "firebase/php-jwt": "^6.11"
+        "firebase/php-jwt": "^6.11",
+        "endroid/qr-code": "^6.0",
+        "dompdf/dompdf": "^3.1",
+        "phpmailer/phpmailer": "^7.0"
     },
     "scripts": {
         "doctrine:schema:create": "vendor/bin/doctrine orm:schema-tool:create",

@@ -12,10 +12,7 @@ use Trekly\Participation\Infrastructure\Http\PaymentServiceClient;
 use Trekly\Participation\Infrastructure\Email\EmailService;
 use Trekly\Participation\Infrastructure\Services\TicketService;
 
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+// CORS headers are handled by root bootstrap.php
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -41,14 +38,15 @@ try {
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     $method = $_SERVER['REQUEST_METHOD'];
     
-    if ($uri === '/api/participations') {
+    // Support subdirectories (e.g., /gotribe/api/participations)
+    if (preg_match('#/api/participations$#', $uri)) {
         if ($method === 'POST') {
             $controller->request();
         } else {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed']);
         }
-    } elseif (preg_match('#^/api/participations/user/([^/]+)$#', $uri, $matches)) {
+    } elseif (preg_match('#/api/participations/user/([^/]+)$#', $uri, $matches)) {
         $userId = $matches[1];
         if ($method === 'GET') {
             $controller->getUserParticipations($userId);
@@ -56,7 +54,7 @@ try {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed']);
         }
-    } elseif (preg_match('#^/api/participations/([^/]+)/status$#', $uri, $matches)) {
+    } elseif (preg_match('#/api/participations/([^/]+)/status$#', $uri, $matches)) {
         $id = $matches[1];
         if ($method === 'PUT') {
             $controller->updateStatus($id);
@@ -64,8 +62,11 @@ try {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed']);
         }
-    } elseif ($uri === '/api/participations/validate' && $method === 'POST') {
+    } elseif (preg_match('#/api/participations/validate$#', $uri) && $method === 'POST') {
         $controller->validate();
+    } elseif ($uri === '/api/participations/test_jwt') {
+        require __DIR__ . '/../test_jwt.php';
+        exit;
     } else {
         http_response_code(404);
         echo json_encode(['error' => 'Not Found', 'uri' => $uri]);

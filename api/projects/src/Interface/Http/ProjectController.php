@@ -49,7 +49,7 @@ class ProjectController
                 try {
                     $jwt = $matches[1];
                     // MATCHING SECRET KEY WITH AUTH SERVICE
-                    $key = new Key($_ENV['JWT_SECRET'] ?? 'secret_key_change_me', 'HS256');
+                    $key = new Key($_ENV['JWT_SECRET'] ?? 'gotribe_jwt_secret_change_this_in_production_32chars_minimum', 'HS256');
                     $decoded = JWT::decode($jwt, $key);
                     
                     $creatorId = $decoded->sub ?? $creatorId;

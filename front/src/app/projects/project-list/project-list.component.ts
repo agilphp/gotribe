@@ -39,7 +39,7 @@ export class ProjectListComponent implements OnInit {
     projects: any[] = [];
     filteredProjects: any[] = [];
     ratedProjectIds: Set<string> = new Set();
-    joinedProjectIds: Set<string> = new Set();
+    participationsByProject: { [projectId: string]: { status: string } } = {};
     currentUser$: Observable<any>;
 
     searchFilters = {
@@ -120,7 +120,10 @@ export class ProjectListComponent implements OnInit {
         this.currentUser$.subscribe(user => {
             if (user && user.userId) {
                 this.participationService.getUserParticipations(user.userId).subscribe(participations => {
-                    this.joinedProjectIds = new Set(participations.map(p => p.projectId));
+                    this.participationsByProject = {};
+                    participations.forEach(p => {
+                        this.participationsByProject[p.projectId] = { status: p.status };
+                    });
                 }, error => {
                     console.error('Error fetching participations:', error);
                 });
@@ -185,7 +188,8 @@ export class ProjectListComponent implements OnInit {
         this.participationService.joinProject(projectId).subscribe(
             response => {
                 console.log('Successfully joined project:', response);
-                this.joinedProjectIds.add(projectId);
+                // Actualiza el estado de participación en participationsByProject
+                this.participationsByProject[projectId] = { status: response.status };
             },
             error => {
                 console.error('Error joining project:', error);

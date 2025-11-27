@@ -9,12 +9,22 @@ use Trekly\Project\Infrastructure\Http\AuthServiceClient;
 
 class PublishProjectUseCase
 {
+    private ProjectRepository $repository;
+    private CreatorQRService $qrService;
+    private ProjectEmailService $emailService;
+    private AuthServiceClient $authClient;
+
     public function __construct(
-        private ProjectRepository $repository,
-        private CreatorQRService $qrService,
-        private ProjectEmailService $emailService,
-        private AuthServiceClient $authClient
-    ) {}
+        ProjectRepository $repository,
+        ?CreatorQRService $qrService = null,
+        ?ProjectEmailService $emailService = null,
+        ?AuthServiceClient $authClient = null
+    ) {
+        $this->repository = $repository;
+        $this->qrService = $qrService ?? new CreatorQRService();
+        $this->emailService = $emailService ?? new ProjectEmailService();
+        $this->authClient = $authClient ?? new AuthServiceClient();
+    }
 
     public function execute(string $id, string $creatorId): void
     {
