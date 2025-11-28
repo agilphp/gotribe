@@ -6,8 +6,8 @@ node_modules/
 /build/
 
 # Environment files
-#.env
-#.env.*
+.env
+.env.*
 
 # IDE/editor config
 .vscode/
@@ -56,9 +56,9 @@ assets/
 migrations/
 
 # Ignore generated files
-*.pdf
-*.zip
-*.tar.gz
+#*.pdf
+#*.zip
+#*.tar.gz
 
 # Ignore translations if generated
 src/assets/i18n/*.json

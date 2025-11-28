@@ -5,6 +5,8 @@ import { Router, RouterModule } from '@angular/router';
 import { ProjectService } from '../project.service';
 import { AuthService } from '../../auth/auth.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ProjectSuccessDialogComponent } from '../project-success-dialog/project-success-dialog.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,6 +32,7 @@ import { OnInit } from '@angular/core';
         MatButtonModule,
         MatSelectModule,
         MatSnackBarModule,
+        MatDialogModule,
         MatDatepickerModule,
         MatIconModule,
         MatDividerModule,
@@ -50,6 +53,7 @@ export class ProjectCreateComponent implements OnInit {
         private projectService: ProjectService,
         private router: Router,
         private snackBar: MatSnackBar,
+        private dialog: MatDialog,
         private authService: AuthService,
         private currencyService: CurrencyService
     ) {
@@ -119,8 +123,13 @@ export class ProjectCreateComponent implements OnInit {
 
             this.projectService.createProject(payload).subscribe({
                 next: () => {
-                    this.snackBar.open('Project created successfully!', 'Close', { duration: 3000 });
-                    this.router.navigate(['/projects']);
+                    this.dialog.open(ProjectSuccessDialogComponent, {
+                        width: '400px',
+                        disableClose: true,
+                        data: { price: payload.price }
+                    }).afterClosed().subscribe(() => {
+                        this.router.navigate(['/projects']);
+                    });
                 },
                 error: (error: any) => {
                     this.snackBar.open('Failed to create project', 'Close', { duration: 3000 });

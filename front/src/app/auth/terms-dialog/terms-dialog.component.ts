@@ -71,6 +71,22 @@ import { MatButtonModule } from '@angular/material/button';
                 <li>La aceptación es un requisito obligatorio para crear cuenta en GoTribe y usar sus servicios.</li>
             </ul>
 
+            <h3>9. REGULACIONES ADICIONALES</h3>
+            <ul>
+                <li>Gotribe no acepta registro de menores de edad. Los menores de edad que participen en eventos creados en GoTribe son responsabilidad exclusiva de un tutor.</li>
+                <li>Los members y creadores deben registrar en la plataforma la llegada inicial del member al evento cuando el costo del evento es mayor a 0.</li>
+                <li>GoTribe aleatoriamente se comunica con los miembros para encuestar sobre el evento con el objetivo de mejorar la calidad de los mismos.</li>
+                <li>GoTribe eliminará cuentas tanto de members como de creators si se identifican anomalías entre usuarios o hacia la plataforma.</li>
+                <li>El registro en GoTribe.co es voluntario y la responsabilidad total es del registrante.</li>
+            </ul>
+
+            <h3>10. OBLIGACIONES Y COMISIONES DE LOS CREADORES</h3>
+            <ul>
+                <li>Los CREADORES tienen la responsabilidad de pagar el 10% del total acumulado por los members inscritos y que participen del evento cuando este tenga un costo mayor a 0. Si el pago no se realiza, la cuenta será suspendida 24 horas después de finalizado el evento.</li>
+                <li>Los CREADORES deben solicitar a los participantes, una vez terminado el evento, calificar la aventura con el fin de que su perfil dentro de la plataforma tenga la mayor reputación ante la comunidad.</li>
+                <li>El algoritmo calcula y otorga un rating a los CREADORES basado en estas calificaciones.</li>
+            </ul>
+
             <p style="margin-top: 20px;"><strong>Este documento debe ser aceptado de forma expresa para proceder con el registro en la plataforma GoTribe.</strong></p>
         </mat-dialog-content>
         <mat-dialog-actions align="end">
